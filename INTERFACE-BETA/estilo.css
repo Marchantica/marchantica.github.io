@@ -1,0 +1,23 @@
+.der {
+width: 100%; 
+background: linear-gradient(180deg, #111110 45%, #111110b3);
+height: 50pt; 
+padpadding: 0pt; 
+margin: 0%; 
+display: flex; 
+align-items: center; 
+justify-content: center;
+text-align: center;
+position: sticky;
+  top: 0px;
+    
+}
+
+* { padding: 0pt;margin: 0pt;
+    
+}
+
+.logo {
+    
+    width: 70pt;
+}
