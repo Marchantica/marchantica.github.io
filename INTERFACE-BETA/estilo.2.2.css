@@ -1,0 +1,266 @@
+.der {
+width: 100%; 
+background: linear-gradient(180deg, #111110 45%, #111110d9);
+height: 40pt; 
+padding: 0pt; 
+margin: 0%; 
+align-items: center; 
+justify-content: center;
+text-align: center;
+display: flex;
+position: sticky;
+  top: 0px;
+    
+} 
+
+* { padding: 0pt;margin: 0pt;
+    text-align: center;
+
+    
+}
+
+.logo {
+    
+    width: 45pt;
+}
+
+.navv { 
+      width: 50%; 
+      height: 20pt;
+      background-color: #111110;
+      border-radius: 10pt;
+      display: flex;
+      align-items: center; 
+    justify-content: center;
+    text-align: center;
+    margin: 1pt;
+    margin: 0%;
+    padding: 0%;
+      
+     
+}
+
+.contnav { 
+    color: white;
+    font-size: 80%;
+    align-items: center; 
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    width: 100%;
+    position: fixed;
+    bottom: 1%;
+    font-family: "Roboto Flex", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    margin: 0%;
+    padding: 0%;
+    
+    
+}
+
+.mshelp1 { position: absolute;
+
+    animation-duration: 30s;
+    animation-name: msh1;
+    animation-iteration-count: infinite;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select:none;
+    user-select:none;
+    
+
+}
+
+.mshelp2 { position: absolute;
+
+    animation-duration: 30s;
+    animation-name: msh2;
+    animation-iteration-count: infinite;
+
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select:none;
+    user-select:none;
+}
+
+@keyframes msh1 {
+
+    0% {color: #FFFFFF00;
+
+    }
+
+    20% {color: #FFFFFF00;
+
+    }
+
+    25% {color: #FFFFFF;
+
+    }
+
+    30% {color: #FFFFFF00;
+
+    }
+
+    35% {color: #FFFFFF;
+
+    }
+
+    40% {color: #FFFFFF;
+
+    }
+
+    50% {color: #FFFFFF00;
+
+}
+
+    100% {color: #FFFFFF00;
+
+}
+
+}
+
+@keyframes msh2 {
+
+    0% {color: #FFFFFF00;
+
+    }
+
+    50% {color: #FFFFFF00;
+
+    }
+
+    60% {color: #FFFFFF;
+
+    }
+
+    80% {color: #FFFFFF;
+
+    }
+
+    90% {color: #FFFFFF00;
+
+    }
+
+    
+    100% {color: #FFFFFF00;
+
+    }
+
+}
+    
+
+navv.done {
+    background: #ccff99;
+  }
+  
+
+  .navv:hover {
+    animation-duration: 3s;
+    animation-name: menuh;
+    animation-fill-mode: forwards;
+}
+
+  @keyframes menuh {
+
+    0% {width: 50%;
+    bottom: 1%;}
+
+
+    100% {width: 100%; 
+        height: 50pt;
+        bottom: 0%;
+    border-radius: 0pt;}
+  }
+
+  .menu {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .ico {
+    height: 20pt;
+    list-style: none;
+    margin: 30pt;
+    
+
+
+  }
+
+  .navv:hover .menu{
+    visibility:visible;
+display: flex;
+animation-name: icons;
+animation-duration: 3s;
+animation-fill-mode: forwards;
+pointer-events: auto;
+
+  }
+
+  .navv:hover .mshelp2{
+    display: none;
+      }
+
+      .navv:hover .mshelp1{
+        display: none;
+          }
+
+ @keyframes icons {
+
+    0% {opacity: 0%;
+    bottom: -200px;
+position: fixed;}
+
+    50% {opacity: 0%;}
+    100% {opacity: 100%;}
+ }        
+
+ .boton {border: none;
+    background-color: transparent;
+    box-shadow: none;
+cursor: pointer;}
+
+.popover {
+
+    width: 100%;
+    height: 90%;
+background-color: transparent;
+color: #FFFFFF;
+border: none;
+
+}
+
+.menp {
+
+
+  
+    background-color: #111110;
+    width: 50%;
+    height: 50%;
+    border-radius: 10pt;
+    display: flex;
+    align-items: center; 
+justify-content: center;
+text-align: center;
+position: absolute;
+top: 25%;
+left: 25%;
+animation-name: ap;
+animation-duration: 2s;
+animation-fill-mode: forwards;
+}
+
+.contme {display: block; }
+
+.menut { 
+    font-size: 30pt;
+    font-weight: 200;
+}
+
+@keyframes ap {
+    
+    from{opacity: 0%;}
+    to{opacity: 100%;}
+}
