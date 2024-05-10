@@ -14,8 +14,8 @@ text-align: center;
 display: flex;
 position: sticky;
   top: 0px;
-  overflow-y: hidden
-    
+  overflow-y: hidden;
+  z-index: 3;
 } 
 
 * { padding: 0pt;margin: 0pt;
@@ -209,7 +209,8 @@ position: sticky;
 
 @keyframes ican {
     from {height: 20pt;}
-    to {height: 30pt;}
+    to {height: 30pt;
+        filter: blur(0.1rem);}
 }
  
 
@@ -361,9 +362,8 @@ margin-bottom: 2pt;
 opacity: 40%;}
 
 .banner1 {
-    width: 100px;
+    width: 200vh;
     height: 50vh;
-    overflow-x:scroll;
     
    
 
@@ -380,9 +380,9 @@ a {text-decoration:none; color:inherit;  -webkit-tap-highlight-color: rgba(0,0,0
 
 .bien1 {
     width: 300vh;
-    position: fixed;
+    position: absolute;
     left: -290vh;
-    top: 0vh;
+    top: -8vh;
     animation-name: mov1;
     animation-duration: 20s;
     animation-iteration-count: infinite;
@@ -391,16 +391,109 @@ a {text-decoration:none; color:inherit;  -webkit-tap-highlight-color: rgba(0,0,0
 }
 
 .bien2 {
-    width: 50%;
+    position: relative;
+    width: 100%;
     z-index: 2;
-    position: fixed;
-    top: 25%;
-    left: 25%;
 }
 
 @keyframes mov1 {
     
-    from{left: 0vh;}
+    from{left: -300vh;}
 
-    to{left: -300vh;}
+    50% {filter: blur(1.5rem);}
+
+    90% {filter: blur(0rem);}
+
+    to{left: 200vh;}
 }
+
+.contb1 {
+width: 100%;
+height: 50vh;
+display: flex;
+justify-content: center;
+text-align: center;
+align-items: center; 
+position: absolute;
+
+
+}
+
+.sub {
+    width: 100%;
+    height: 1vh;
+    position: relative;
+    top:-1vh;
+    background: linear-gradient(90deg,  #006858, #8E2031  , #E17327  );
+    z-index: 1;
+    filter: blur(0.3rem);
+    animation-name: gra1;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+    background-blend-mode: saturation;
+    border-radius: 50%;
+
+
+    
+}
+
+.sub2 {
+    width: 100%;
+    height: 1vh;
+    position: relative;
+    top: -2.3vh ;
+    background: linear-gradient(90deg,    #E17327  ,  #8E2031 ,  #006858  );
+    z-index: 2;
+    filter: blur(0.3rem);
+    animation-name: gra2;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    z-index: 1;
+    animation-direction: alternate-reverse;
+    background-blend-mode: saturation;
+    border-radius: 50%;
+
+    
+}
+
+.sub1 {
+    width: 100%;
+    height: 0.5vh;
+    top: -3vh;
+    position: relative;
+    background-color: black;
+    z-index: 2;
+    box-shadow: 0px 0px 10px 0.1em #FFFEFA;
+    background-blend-mode: saturation;
+    border-radius: 50%;
+
+
+    
+}
+
+
+
+.contb2 {
+    width: 70%;
+    z-index: 2;
+}
+
+@keyframes gra1 {
+
+
+    from {opacity: 100%;}
+
+    to { opacity: 0%;}
+}
+
+@keyframes gra2 {
+
+
+    from {opacity: 0%;}
+
+    to { opacity: 100%;}
+}
+
