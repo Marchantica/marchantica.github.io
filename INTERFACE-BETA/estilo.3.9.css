@@ -1,0 +1,633 @@
+
+.der {
+width: 100%; 
+background: linear-gradient(180deg, #111110 45%, #111110d9);
+height: 40pt; 
+padding: 0pt; 
+margin: 0%; 
+align-items: center; 
+justify-content: center;
+text-align: center;
+display: flex;
+position: sticky;
+  top: 0px;
+  z-index: 3;
+} 
+
+* { padding: 0pt;margin: 0pt;
+    text-align: center;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    
+
+    
+}
+
+.logo {
+    
+    width: 45pt;
+}
+
+.navv { 
+      width: 50%; 
+      height: 20pt;
+      background-color: #111110;
+      border-radius: 10pt;
+      display: flex;
+     
+      align-items: center; 
+    justify-content: center;
+    text-align: center;
+    margin: 1pt;
+    margin: 0%;
+    padding: 0%;
+    bottom:0%;
+  
+
+      
+     
+}
+
+.contnav { 
+    color: white;
+    font-size: 90%;
+    align-items: center; 
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    width: 100%;
+    position: fixed;
+    bottom:1%;
+    font-family: "Roboto Flex", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    margin: 0%;
+    padding: 0%;
+    z-index: 4;
+
+    
+    
+}
+
+.mshelp1 { position: absolute;
+
+    animation-duration: 30s;
+    animation-name: msh1;
+    animation-iteration-count: infinite;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select:none;
+    user-select:none;
+    
+
+}
+
+.mshelp2 { position: absolute;
+
+    animation-duration: 30s;
+    animation-name: msh2;
+    animation-iteration-count: infinite;
+
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select:none;
+    user-select:none;
+}
+
+@keyframes msh1 {
+
+    0% {color: #FFFFFF00;
+
+    }
+
+    20% {color: #FFFFFF00;
+
+    }
+
+    25% {color: #FFFFFF;
+
+    }
+
+    30% {color: #FFFFFF00;
+
+    }
+
+    35% {color: #FFFFFF;
+
+    }
+
+    40% {color: #FFFFFF;
+
+    }
+
+    50% {color: #FFFFFF00;
+
+}
+
+    100% {color: #FFFFFF00;
+
+}
+
+}
+
+@keyframes msh2 {
+
+    0% {color: #FFFFFF00;
+
+    }
+
+    50% {color: #FFFFFF00;
+
+    }
+
+    60% {color: #FFFFFF;
+
+    }
+
+    80% {color: #FFFFFF;
+
+    }
+
+    90% {color: #FFFFFF00;
+
+    }
+
+    
+    100% {color: #FFFFFF00;
+
+    }
+
+}
+    
+
+
+.contnav:hover {
+
+    bottom:0%;
+} 
+ 
+  .navv:hover {
+    animation-duration: 1.5s;
+    animation-name: menuh;
+    animation-fill-mode: forwards;
+   
+}
+
+  @keyframes menuh {
+
+    0% {width: 50%;
+    bottom: 1%;}
+
+
+    100% {width: 100%; 
+        height: 50pt;
+        bottom: 0%;
+    border-radius: 0pt;
+ 
+    
+    }
+  }
+
+  .menu {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .ico {
+    height: 20pt;
+    list-style: none;
+    margin: 30pt; }
+    
+.ico:hover {animation: alternate-reverse;
+    animation-name: ican;
+    animation-duration: 1s;
+
+}
+
+@keyframes ican {
+    from {height: 20pt;}
+    to {height: 30pt;
+        filter: blur(0.1rem);}
+}
+ 
+
+  .navv:hover .menu{
+    visibility:visible;
+display: flex;
+animation-name: icons;
+animation-duration: 2s;
+animation-fill-mode: forwards;
+pointer-events: auto;
+
+  }
+
+  .navv:hover .mshelp2{
+    display: none;
+      }
+
+      .navv:hover .mshelp1{
+        display: none;
+          }
+
+ @keyframes icons {
+
+    0% {opacity: 0%;
+    bottom: -200px;
+position: fixed;}
+
+    50% {opacity: 0%;}
+    100% {opacity: 100%;}
+ }        
+
+ .boton {border: none;
+    
+    box-shadow: none;
+cursor: pointer;
+background-color: transparent;
+-webkit-tap-highlight-color: rgba(0,0,0,0);}
+
+
+.popover {
+
+    width: 100%;
+    height: 93%;
+background-color: transparent;
+color: #FFFFFF;
+border: none;
+
+}
+
+.menp {
+    
+   
+
+
+
+  
+    background: linear-gradient(180deg, #111110 30%, #11111033);
+    width: 50%;
+    height: 50%;
+    border-radius: 10pt;
+    display: flex;
+    align-items: center; 
+justify-content: center;
+text-align: center;
+position: absolute;
+top: 25%;
+right: 15%;
+animation-name: ap;
+animation-duration: 1s;
+animation-fill-mode: forwards;
+z-index: 2;
+opacity: 80%;
+padding:10%;
+}
+
+.contme {display: block; }
+
+.menut { 
+    font-size: 200%;
+    font-weight: 200;
+}
+
+@keyframes ap {
+    
+    from{opacity: 0%;}
+    to{opacity: 100%;}
+}
+
+.menp1 {
+
+
+  
+    background-color: white;
+    width: 50%;
+    height: 50%;
+    border-radius: 10pt;
+    display: flex;
+    align-items: center; 
+justify-content: center;
+text-align: center;
+position: absolute;
+top: 25%;
+left: 15%;
+animation-name: gra;
+animation-duration: 10s;
+z-index: 1;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+opacity: 80%;
+padding:10%;
+}
+
+@keyframes gra{
+
+    0%{background-color:  #006858 ;
+    }
+
+    25%{background-color:  #8E2031 ;}
+
+    50%{background-color:  #292E4D ;}
+
+    100%{background-color:  #E17327 ;}
+}
+
+.linico {
+    background-color: #FFFFFF;
+    height: 0.5pt;
+    opacity: 60%;
+    margin-top: 2pt;
+    margin-bottom: 2pt;
+}
+
+.botme {
+    margin-top: 10pt;
+    font-weight: 400;
+    text-align: left;
+ 
+}
+
+.botme1 {
+    margin-top: 5pt;
+    font-weight: 400;
+    text-align: left;
+    
+}
+
+.herr {margin-top: 2pt;
+margin-bottom: 2pt;
+opacity: 40%;}
+   
+
+a {text-decoration:none; color:inherit;  -webkit-tap-highlight-color: rgba(0,0,0,0);}
+
+.herrse:hover { 
+    text-shadow: 1px 1px 2px black,
+    0 0 1em white,
+    0 0 0.2em white;
+}
+
+
+
+.banner1 { background-color: black;
+
+    width: 100%;
+    height: 50vh;
+}
+
+.marco {
+    width: 100%;
+    height: 96%;
+    align-items: center; 
+    justify-content: center;
+    text-align: center;
+    display: flex;
+}
+
+.marco1 {
+    width: 100%;
+    align-items: center; 
+    justify-content: center;
+    text-align: center;
+    display: block;
+}
+
+
+.sub {
+    width: 100%;
+    height: 2vh;
+    bottom:1vh;
+    background: linear-gradient(90deg,  #006858, #8E2031 0%  , #E17327  );
+    z-index: 1;
+    filter: blur(0.3rem);
+    animation-name: gra1;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    background-blend-mode: saturation;
+    border-radius: 50%;
+    animation-direction: reverse;
+
+
+    
+}
+
+.bien {
+    width: 95%;
+    position: relative;
+    animation-name: bienv;
+    animation-duration: 5s;
+    z-index: 2;
+
+}
+
+
+@keyframes bienv
+
+{
+ 0% {filter: blur(1em);}
+
+ 100% {filter: blur(0em);}
+
+  }
+
+
+
+  .lu {
+
+    height: 25%;
+    position: absolute;
+    animation-duration: 5s;
+    z-index: 1;
+    animation-name: lu;
+    animation-duration: 20s;
+    animation-iteration-count: infinite;
+
+}
+
+@keyframes lu
+
+{
+ 0% {filter: blur(0em);}
+
+ 50% {filter: blur(1em);}
+
+ 100% {filter: blur(0em);}
+
+  }
+
+
+
+
+@keyframes gra1 
+
+{
+
+     0% {background: linear-gradient(90deg,  #006858, #8E2031 0%  , #E17327  );
+}
+
+5% {background: linear-gradient(90deg,  #006858, #8E2031 10%  , #E17327  );
+}
+
+10% {background: linear-gradient(90deg,  #006858, #8E2031 20%  , #E17327  );
+}
+
+15% {background: linear-gradient(90deg,  #006858, #8E2031 30%  , #E17327  );
+}
+
+20% {background: linear-gradient(90deg,  #006858, #8E2031 40%  , #E17327  );
+}
+
+25% {background: linear-gradient(90deg,  #006858, #8E2031 50%  , #E17327  );
+}
+
+30% {background: linear-gradient(90deg,  #006858, #8E2031 60%  , #E17327  );
+}
+
+35% {background: linear-gradient(90deg,  #006858, #8E2031 70%  , #E17327  );
+
+}
+40% {background: linear-gradient(90deg,  #006858, #8E2031 80%  , #E17327  );
+
+}
+45% {background: linear-gradient(90deg,  #006858, #8E2031 90%  , #E17327  );
+
+}
+50% {background: linear-gradient(90deg,  #006858, #8E2031 90%  , #E17327  );
+
+}
+
+55% {background: linear-gradient(90deg,  #006858, #8E2031 90%  , #E17327  );
+}
+
+60% {background: linear-gradient(90deg,  #006858, #8E2031 80%  , #E17327  );
+}
+
+65% {background: linear-gradient(90deg,  #006858, #8E2031 70%  , #E17327  );
+}
+
+70% {background: linear-gradient(90deg,  #006858, #8E2031 60%  , #E17327  );
+}
+
+75% {background: linear-gradient(90deg,  #006858, #8E2031 50%  , #E17327  );
+}
+
+80% {background: linear-gradient(90deg,  #006858, #8E2031 40%  , #E17327  );
+}
+
+85% {background: linear-gradient(90deg,  #006858, #8E2031 30%  , #E17327  );
+}
+
+90% {background: linear-gradient(90deg,  #006858, #8E2031 20%  , #E17327  );
+
+}
+95% {background: linear-gradient(90deg,  #006858, #8E2031 10%  , #E17327  );
+
+}
+100% {background: linear-gradient(90deg,  #006858, #8E2031 0%  , #E17327  );
+
+}
+
+
+}
+
+
+.banner2 {
+    width: 98%;
+    display: block;
+    padding: 1%;
+    align-items: center; 
+    justify-content: center;
+    text-align: center;
+
+}
+
+.mui {
+    width: 50%;
+margin: 5%;
+min-width: 320px;}
+
+.contb2 {
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: reverse;
+}
+
+.flip-container {
+    transform: rotate(12deg);
+    background-color: transparent;
+    width: 132px;
+    height: 213px;
+    border: 1px solid #ccc;
+    perspective: 1000px; 
+    margin: 40pt;
+    min-width: 132px;
+    border-radius: 3pt;
+    
+  }
+  .card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 1s;
+    transform-style: preserve-3d;
+  }
+  .flip-container .card { animation-name: giro;
+    animation-duration: 10s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+
+  .flip-container:hover .card { animation-play-state: paused;
+    
+  }
+  .front, .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+  }
+  .front {
+    background-color: #ff0000;
+    color: #fff;
+    
+  }
+  .back {
+    background-color: #0000ff;
+    color: white;
+    transform: rotateY(180deg);
+  }
+
+  .text {
+    margin: 12pt;
+    font-family: "Roboto Flex", sans-serif;
+    font-weight: 200;
+    display: inline;
+    text-align: center;
+    text-justify: distribute;
+    text-wrap: pretty;
+  }
+
+  .text mark {
+    background-color:transparent;
+    color:#C4D200; 
+    font-weight: 500;
+    font-style: italic;
+    border-radius: 2pt;
+  }
+
+
+@keyframes giro {
+    0% {transform: rotateY(0deg);}
+
+    100% {transform: rotateY(360deg);}
+}
+
