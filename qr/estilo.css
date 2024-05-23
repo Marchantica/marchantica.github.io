@@ -1,0 +1,6 @@
+.modal-content {
+	background-color: orange;
+	width: auto;
+	min-width: 100px;
+    max-width: 500px;
+}
