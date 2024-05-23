@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es-AR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>html2canvas demo</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="qrcode.js"></script>
+
+
+<style>
+
+
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden
+}
+
+
+
+.container { 
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	max-width: 100%;
+}
+
+
+.qr {
+	padding-top: 15px;
+	padding-left: 17px;
+}
+
+
+
+.headd {
+	
+	width: 1233px;
+	height: 1300px;
+	padding: 0pt; 
+margin: 0%; 
+align-items: center; 
+justify-content: center;
+text-align: center;
+margin-left: 100%;
+	
+}
+
+
+
+.row {
+  margin: 0;
+  width: 100%;
+  display: block;
+  align-items: center; 
+justify-content: center;
+text-align: center;
+}
+
+.modal-body {
+  background-color: #eee;
+}
+
+. {overflow: hidden}
+
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  
+    <div class="container">
+		
+
+
+      <div class="row">
+
+        <p id="random">Generando número aleatorio...</p>
+	
+		
+        <div class="header">
+
+
+          <input id="text" type="text" value="http://jindo.dev.naver.com/collie" style="width:80%" /><br />
+
+
+		
+
+
+
+
+
+        
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#screenshotModal">
+            Capturar pantalla
+          </button>
+        </div><!-- .header -->
+
+
+      </div><!-- .row -->
+    </div><!-- .container -->
+  
+  <!-- Modal -->
+  <div class="modal fade" id="screenshotModal" tabindex="-1" role="dialog" aria-labelledby="screenshotModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="screenshotModalLabel">Captura de pantalla</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Cargando la captura de pantalla…</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<header>
+  <div id="contenedorC" class="headd">
+	<div id="qrcode" class="qr"  >
+
+	</div>
+
+<img style="margin-top: 13px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAA8CAIAAAAfXYiZAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAABPpJREFUeNrsm9FZ6kAQhaP3PviGVqBWIB0EO+DRN7QCpQKxArQCsAJjBUoFYAViBWAF3F/mut9+yRI3ySYbgvMQQ0h2s2fPnJ0dxr3VahX8mp39raab5XL5+vo6mUxardZgMHDV7Hg85tjpdE5OTioYxV55zFIAcZzNZur6YrE4PDx00v7p6SlHzgGr2+2GYQhwTho328qpvb+/j0ajy8vLlKm+vb110hcdGduna16Ab6fTqdvRuQTr5eXFZnqYeSfd2bger+RwgC41CxTwgna7jTBx5CMOeHd3l3QftIbJL9IXLc/n8+R1mj0+Pubk7e2Njhy75KpkM84/Fws2y6yU0Wy67Ze9ghjBghSykOWmFWbZl0PbDzxZ0j1zPFtNxOABrJhI5SaXTisW1maC1ev1UP3i5FJPpQcoW++Gw+GwILkUrVjmYq01DazO2oqQS91/fX1dYqReE4GPqUwmckVRpGh1c3NT/aJUNVhFyNXv9z3Syk/oENvTWZKLeyRk90UrP2DJRjcruWzUKgzDBgalWZWrDrTyBlaSXA8PDyn3q299qZXn7U6MXLPZzLjdk9hKcod+aeUTLHvl8htb1QKsJLmMuQQ9ZPdLq0rBkmR5VnLVh1ZfVnbyT+eRMWcfex89Eazy1MC0WCx+TGS7yu57S/4VUa560cqvZqUrly5h3tWqLmBtIpeet6oDrWoBlpFcg8HAVzq07mClKFemdOjn52fzwUqhTyZa6UUCTQYrSa7AR5Z9O8CS+ODHK79g/bd2u60nUaUSYIfA0vd6Hx8fm25TVQu6Qunnya2S2PPzc5VglVvMpivueDwmXGq1WkmR4jaWv9FoJBl6IOZbxbJ+v392diY3E1JMJhMFcaw2ZBOmW7A3HA6HKcEkWMSKrYBDtntwSu0Quajv+H4cDrG+cRfpxEqp/INEMCVZEiRledDEuPzBICj29PQkEEMT+TlH/4FD7YSC76KiZFaHllkZSon7nVf+6Ys9Cs1UM36u2zzOCHlksTZOhGs2ndIFHekLAkhBSbcsc8ws5vn8/JyX7vV63W43JUqaaybBtwicCJbcILLFR6lPY/xSI5eySvIULSD8URRJwsdYyZXPHIO1XFsSI8YwWxu+I+fFg1gsDMP22ow9gpfb+KPEamWZZKlWNpY0KiFT44c19/f3Im0MFc8CevXspl80gu8KTalWLi86cw8WrHl8fGSoMYDEfTB8yuhN4CIuLIp+dXVFU/hRTKe5yJ0cCdyErbGIQZV5c6ypwE+nU4gQcwcReAZvI/CMLabofORiPoGX6aEFhwXLRcFiuQGL2DIkZeiZViJ5xFjsbrkmqvcBuFjcwBQS9BVfGYMiUQKTqd5JMOJFczQl7Ev55wCG6oTsvKFlEOMMLPrT48ncGFVmwjV9Scnnm0FumJgx51FfqcarwlBFNCDL+v8qgX1P6icWuknxmvobRFPxSibHtAILaESbchO4hqaCe9kYOQALokqLrHeNgckImc0A08CS9BtOvtVOZ+mYomXpGZ5gk5BL6LRdEl7QGKzsKzYJf2CEWbZaRUKSLTWGLJskY2QXJOND+eeF1Q6b0IWFMuZVgR4cSAp8BwllDJWgGC6poxGoVY8vyq5v2jqTIFZJWCBIcamRkYGTbAreJvu5r8QrfNudJS+3SxI//Tk6OuLPwcFB8GsbDHAuLi6iKCoxrdw8+yfAAAFEAu4XRR79AAAAAElFTkSuQmCC">	
+	
+</div>
+</header>
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>    
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
+
+  <script>
+    function randomDelay() {
+      var random = 1000 * Math.random();
+      $('#random').text(random);
+    }
+
+    setTimeout(() => {
+      randomDelay();
+    }, 1800);
+
+    var idModal = '#screenshotModal';
+    $(idModal).on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var modal = $(this)
+      var body = modal.find('.modal-body');
+
+      // Capturar pantalla
+      html2canvas(document.querySelector("#contenedorC")).then(function(canvas) {
+
+		
+        const type     = 'image/jpeg';
+        const filename = Date.now() + ".jpeg";
+        const img      = new Image();
+              img.src  = canvas.toDataURL(type, 1.0);
+
+        body.html(img.outerHTML);
+        body.find('img').addClass('img-fluid');
+
+        // Enlace para descargar la captura
+        const linkDownload = body.append(`<a href="#">Descargar</a>`);
+        linkDownload.click(function(event) {
+          event.preventDefault();
+          canvas.toBlob(function(blob) {
+            let link = document.createElement("a");
+            link.download = filename;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+          }, type);
+        });
+      });
+    });
+
+    // Generamos un nuevo número aleatorio al cerrar el modal
+    $(idModal).on('hidden.bs.modal', function(event) {
+      randomDelay();
+    });
+  </script>
+
+<script type="text/javascript">
+	var qrcode = new QRCode(document.getElementById("qrcode"), {
+		width : 1200,
+		height : 1200
+	});
+	
+	function makeCode () {		
+		var elText = document.getElementById("text");
+		
+		if (!elText.value) {
+			alert("Input a text");
+			elText.focus();
+			return;
+		}
+		
+		qrcode.makeCode(elText.value);
+	}
+	
+	makeCode();
+	
+	$("#text").
+		on("blur", function () {
+			makeCode();
+		}).
+		on("keydown", function (e) {
+			if (e.keyCode == 13) {
+				makeCode();
+			}
+		});
+	
+	
+	</script>
+
+
+
+
+
+
+  </body>
+
+
+
+  
+</html>
