@@ -1,0 +1,47 @@
+
+body {
+    background-color: black;
+
+    
+  }
+
+ .ar {
+  
+    display: block;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  
+    
+  }
+
+  .ar1 {
+  
+    
+  }
+
+  
+
+  .hd {
+    max-width: 400px;
+    min-width: 100px;
+    margin: 20pt;
+    margin-bottom: 50pt;
+    align-self: center;
+    top: 1%;
+  }
+
+
+
+
+  .luz {background-blend-mode:hard-light;
+    opacity: 91%;
+margin-top: 33pt;
+max-width: 400px;
+    min-width: 100px;
+align-self: center;}
+
+.ind {
+  width: 100%;
+align-self: center;
+margin-top: 3pt;}
