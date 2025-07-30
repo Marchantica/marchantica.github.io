@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App del Clima</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .weather-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="weather-card text-white rounded-2xl shadow-2xl p-8 max-w-sm w-full">
+        <h1 id="location" class="text-3xl font-bold mb-2">Cargando...</h1>
+        <p id="condition" class="text-lg mb-4 capitalize">Obteniendo datos del clima.</p>
+        
+        <div class="flex items-center justify-between">
+            <div id="temperature" class="text-7xl font-bold">--<span>&deg;C</span></div>
+            <!-- Usaremos una etiqueta de imagen para el ícono de WeatherAPI -->
+            <img id="weather-icon" src="" alt="Ícono del clima" class="w-20 h-20"/>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            
+            // --- ¡IMPORTANTE! ---
+            // REEMPLAZA ESTO con tu propia clave de API de WeatherAPI.com
+            const apiKey = 'e975bc91ab3f453d8cf03055253007'; 
+
+            const locationElement = document.getElementById('location');
+            const tempElement = document.getElementById('temperature');
+            const conditionElement = document.getElementById('condition');
+            const iconElement = document.getElementById('weather-icon');
+
+            const getWeather = (lat, lon) => {
+                locationElement.textContent = 'Cargando...';
+                conditionElement.textContent = 'Obteniendo datos del clima.';
+                tempElement.innerHTML = `--<span>&deg;C</span>`;
+                iconElement.src = ''; // Limpiar ícono anterior
+
+                // URL actualizada para WeatherAPI.com
+                const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lat},${lon}&lang=es`;
+
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            const error = new Error('Respuesta de red no fue exitosa');
+                            error.status = response.status;
+                            throw error;
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Verificamos si hay un error en la respuesta de la API
+                        if (data.error) {
+                            throw new Error(data.error.message);
+                        }
+
+                        // Actualizamos el HTML con los datos de la nueva API
+                        locationElement.textContent = data.location.name;
+                        tempElement.innerHTML = `${Math.round(data.current.temp_c)}<span>&deg;C</span>`;
+                        conditionElement.textContent = data.current.condition.text;
+                        // WeatherAPI proporciona una URL completa para el ícono
+                        iconElement.src = `https:${data.current.condition.icon}`;
+                    })
+                    .catch(error => {
+                        console.error('Error al obtener los datos del clima:', error);
+                        if (error.message.includes('API key')) {
+                             conditionElement.textContent = 'Error: Clave de API inválida.';
+                        } else {
+                            conditionElement.textContent = 'No se pudo cargar el clima.';
+                        }
+                        locationElement.textContent = 'Error';
+                    });
+            };
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    getWeather(lat, lon);
+                }, error => {
+                    console.error('Error al obtener la geolocalización:', error);
+                    locationElement.textContent = 'Caracas (Ubicación por defecto)';
+                    getWeather(10.4880, -66.8791);
+                });
+            } else {
+                console.error('La geolocalización no es soportada por este navegador.');
+                conditionElement.textContent = 'Geolocalización no soportada.';
+                locationElement.textContent = 'Error';
+            }
+        });
+    </script>
+</body>
+</html>
