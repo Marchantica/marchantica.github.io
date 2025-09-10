@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Plantilla de Perfil Clásica</title>
+    <!-- Importante: Enlaza a su propia hoja de estilos -->
+    <link rel="stylesheet" href="template-01.css">
+</head>
+<body>
+    <!-- El contenedor principal con la clase 'cv-container' para aplicar el tamaño A4 -->
+    <div class="cv-container">
+        <!-- SECCIÓN 1: CABECERA -->
+        <header class="cv-header">
+            <div class="header-photo-wrapper">
+                <img id="user-photo" src="../assets/images/default-user-icon.png" alt="Foto de Perfil">
+            </div>
+            <div class="header-name-wrapper">
+                <h1 id="user-name">Nombre Apellido</h1>
+            </div>
+        </header>
+
+        <!-- Contenido principal dividido en dos columnas -->
+        <div class="cv-main-content">
+            <!-- COLUMNA IZQUIERDA -->
+            <div class="cv-column left-column">
+                <section class="cv-section">
+                    <h2 class="section-title">Datos Personales</h2>
+                    <ul class="data-list">
+                        <li><strong>Cédula:</strong> <span id="cedula-data"></span></li>
+                        <li><strong>Fecha de nacimiento:</strong> <span id="birthdate-data"></span></li>
+                        <li><strong>Nacionalidad:</strong> <span id="nationality-data"></span></li>
+                    </ul>
+                </section>
+                <section class="cv-section">
+                    <h2 class="section-title">Cursos Realizados</h2>
+                    <ul id="courses-list" class="item-list">
+                        <!-- Los cursos se añadirán aquí -->
+                    </ul>
+                </section>
+                <section class="cv-section">
+                    <h2 class="section-title">Referencias Personales</h2>
+                    <ul id="references-list" class="item-list">
+                        <!-- Las referencias se añadirán aquí -->
+                    </ul>
+                </section>
+            </div>
+
+            <!-- COLUMNA DERECHA -->
+            <div class="cv-column right-column">
+                <section class="cv-section">
+                    <h2 class="section-title">Dirección y Contacto</h2>
+                    <ul class="data-list">
+                        <li id="location-item"><strong>Ubicación:</strong> <span id="location-data"></span></li>
+                        <li id="phone-item"><strong>Teléfono:</strong> <span id="phone-data"></span></li>
+                        <li id="email-item"><strong>Correo:</strong> <span id="email-data"></span></li>
+                    </ul>
+                </section>
+                <section class="cv-section">
+                    <h2 class="section-title">Formación Académica</h2>
+                    <ul id="education-list" class="item-list">
+                        <!-- La formación se añadirá aquí -->
+                    </ul>
+                </section>
+                <section class="cv-section">
+                    <h2 class="section-title">Experiencia Laboral</h2>
+                    <ul id="experience-list" class="item-list">
+                        <!-- La experiencia se añadirá aquí -->
+                    </ul>
+                </section>
+            </div>
+        </div>
+        <footer class="cv-footer"></footer>
+    </div>
+</body>
+</html>

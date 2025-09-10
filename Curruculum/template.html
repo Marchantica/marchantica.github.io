@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constructor de Perfiles Profesionales</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- COLUMNA DE ENTRADA DE DATOS (FORMULARIO) -->
+        <aside class="input-column">
+            <header class="app-header">
+                <h1>Constructor de Perfiles</h1>
+                <p>Completa los siguientes campos para crear un nuevo perfil.</p>
+            </header>
+
+            <form id="user-form">
+                
+                <fieldset>
+                    <legend>Datos Principales</legend>
+                    <label for="user-name">Nombre Completo:</label>
+                    <input type="text" id="user-name" name="userName" required maxlength="50">
+                    
+                    <label for="user-photo">Fotografía de Perfil:</label>
+                    <input type="file" id="user-photo" name="userPhoto" accept="image/*">
+                </fieldset>
+
+                <fieldset>
+                    <legend>Datos Personales</legend>
+                    <label for="cedula">Cédula:</label>
+                    <input type="text" id="cedula" name="cedula" maxlength="50">
+
+                    <label for="birth-date">Fecha de Nacimiento:</label>
+                    <input type="date" id="birth-date" name="birthDate">
+
+                    <label for="nationality">Nacionalidad:</label>
+                    <input type="text" id="nationality" name="nationality" maxlength="50">
+                </fieldset>
+
+                <fieldset>
+                    <legend>Dirección y Contacto</legend>
+                    <label for="location">Ubicación:</label>
+                    <input type="text" id="location" name="location" maxlength="50">
+
+                    <label for="phone">Teléfono(s):</label>
+                    <input type="text" id="phone" name="phone" maxlength="50">
+
+                    <label for="email">Correo Electrónico:</label>
+                    <input type="email" id="email" name="email" maxlength="50">
+                </fieldset>
+
+                <fieldset>
+                    <legend>Formación Académica</legend>
+                    <div id="education-container">
+                        <div class="form-entry-group">
+                            <label>Título/Oficio:</label>
+                            <input type="text" name="educationTitle" class="education-title" maxlength="50">
+                            <label>Instituto:</label>
+                            <input type="text" name="educationInstitute" class="education-institute" maxlength="50">
+                            <label>Año de Culminación:</label>
+                            <input type="text" name="educationYear" class="education-year" maxlength="50">
+                        </div>
+                    </div>
+                    <button type="button" id="add-education-btn">Añadir Formación</button>
+                </fieldset>
+                
+                <fieldset>
+                    <legend>Experiencia Laboral</legend>
+                    <div id="experience-container">
+                        <div class="form-entry-group">
+                            <label>Cargo:</label>
+                            <input type="text" name="experienceTitle" class="experience-title" maxlength="50">
+                            <label>Empresa:</label>
+                            <input type="text" name="experienceCompany" class="experience-company" maxlength="50">
+                            <label>Año de Inicio:</label>
+                            <input type="text" name="experienceStartYear" class="experience-start-year" maxlength="50">
+                            <label>Año de Culminación:</label>
+                            <input type="text" name="experienceEndYear" class="experience-end-year" maxlength="50">
+                        </div>
+                    </div>
+                    <button type="button" id="add-experience-btn">Añadir Experiencia</button>
+                </fieldset>
+
+                 <fieldset>
+                    <legend>Cursos Realizados</legend>
+                    <div id="courses-container">
+                        <div class="form-entry-group">
+                            <label>Nombre del Curso:</label>
+                            <input type="text" name="courseTitle" class="course-title" maxlength="50">
+                            <label>Instituto:</label>
+                            <input type="text" name="courseInstitute" class="course-institute" maxlength="50">
+                        </div>
+                    </div>
+                    <button type="button" id="add-course-btn">Añadir Curso</button>
+                </fieldset>
+               
+                <fieldset>
+                    <legend>Referencias Personales</legend>
+                    <div id="references-container">
+                        <div class="form-entry-group">
+                            <label>Nombre:</label>
+                            <input type="text" name="referenceName" class="reference-name" maxlength="50">
+                            <label>Teléfono:</label>
+                            <input type="tel" name="referencePhone" class="reference-phone" maxlength="50">
+                        </div>
+                    </div>
+                    <button type="button" id="add-reference-btn">Añadir Referencia</button>
+                </fieldset>
+                
+                <button type="submit" class="save-button">Guardar Perfil</button>
+            </form>
+        </aside>
+
+        <!-- COLUMNA DE SALIDA (DASHBOARD Y VISTA PREVIA) -->
+        <main class="output-column">
+            
+            <section class="dashboard-section">
+                <h2>Perfiles Guardados</h2>
+                <div id="dashboard-container" class="dashboard">
+                    <p class="empty-dashboard-message">Aún no hay perfiles guardados.</p>
+                </div>
+            </section>
+            
+            <section class="preview-section">
+                <h2>Vista Previa</h2>
+                <div id="preview-controls">
+                    <h3>Seleccionar Plantilla</h3>
+                    <div id="template-gallery" class="template-gallery">
+                        <div class="template-thumbnail selected" data-template-url="templates/template-01.html">
+                            <img src="assets/images/template-placeholder.png" alt="Vista previa de Plantilla 1">
+                            <p class="template-name">Clásica</p>
+                        </div>
+                    </div>
+                    <button id="generate-pdf-btn">Generar PDF</button>
+                </div>
+                <div id="preview-area">
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Los scripts se cargan al final para un mejor rendimiento -->
+    <script src="lib/html2canvas.min.js"></script>
+    <script src="lib/jspdf.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

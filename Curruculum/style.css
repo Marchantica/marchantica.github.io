@@ -1,0 +1,301 @@
+/* --- VARIABLES Y ESTILOS GLOBALES --- */
+:root {
+    --primary-color: #4a69bd;
+    --secondary-color: #6a89cc;
+    --background-color: #f8f9fa;
+    --form-background: #ffffff;
+    --text-color: #343a40;
+    --border-color: #dee2e6;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* --- MAQUETACIÓN PRINCIPAL --- */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.input-column {
+    width: 40%;
+    max-width: 500px;
+    padding: 30px;
+    background-color: var(--form-background);
+    box-shadow: 2px 0 15px rgba(0,0,0,0.05);
+    overflow-y: auto; /* Permite scroll si el formulario es muy largo */
+}
+
+.output-column {
+    flex-grow: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.app-header h1 {
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.app-header p {
+    color: #6c757d;
+    margin-bottom: 25px;
+}
+
+
+/* --- ESTILOS DEL FORMULARIO --- */
+form fieldset {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+form legend {
+    font-weight: bold;
+    color: var(--primary-color);
+    padding: 0 10px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="tel"],
+form input[type="date"],
+form input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(74, 105, 189, 0.2);
+}
+
+.form-entry-group {
+    padding: 15px;
+    border: 1px dashed var(--border-color);
+    border-radius: 4px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+
+form button[type="button"] {
+    background-color: #e9ecef;
+    color: var(--text-color);
+}
+
+form button[type="button"]:hover {
+    background-color: #ced4da;
+}
+
+.save-button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--success-color);
+    color: white;
+    font-size: 1.1em;
+}
+
+.save-button:hover {
+    background-color: #218838;
+}
+
+
+/* --- COLUMNA DE SALIDA (DASHBOARD Y VISTA PREVIA) --- */
+.dashboard-section, .preview-section {
+    background-color: var(--form-background);
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.dashboard-section h2, .preview-section h2, #preview-controls h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+#preview-controls h3 {
+    font-size: 1.1em;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.empty-dashboard-message {
+    color: #6c757d;
+}
+
+.template-gallery {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.template-thumbnail {
+    border: 3px solid var(--border-color);
+    border-radius: 6px;
+    padding: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-align: center;
+    background-color: #f8f9fa;
+}
+
+.template-thumbnail img {
+    width: 100px;
+    height: 141px;
+    display: block;
+    object-fit: cover;
+    margin-bottom: 5px;
+    border-radius: 3px;
+    background: linear-gradient(45deg, #6a89cc, #b8a9c9);
+}
+
+.template-thumbnail .template-name {
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+.template-thumbnail.selected {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(74, 105, 189, 0.4);
+    transform: scale(1.05);
+}
+
+#generate-pdf-btn {
+    background-color: var(--primary-color);
+    color: white;
+    width: 100%;
+}
+
+#generate-pdf-btn:hover {
+    background-color: #3b5998;
+}
+
+#preview-area {
+    margin-top: 20px;
+    border: 1px solid var(--border-color);
+    background-color: #e9ecef;
+    min-height: 400px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- DISEÑO RESPONSIVO --- */
+@media (max-width: 1024px) {
+    .app-container {
+        flex-direction: column;
+    }
+
+    .input-column {
+        width: 100%;
+        max-width: none;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    }
+}
+
+/* --- ESTILOS PARA LAS TARJETAS DEL DASHBOARD --- */
+.profile-card {
+    background-color: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.profile-card-img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.profile-card-name {
+    font-weight: 600;
+    margin-bottom: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Añade "..." si el nombre es muy largo */
+}
+
+.profile-card-actions {
+    display: flex;
+    justify-content: space-around;
+    gap: 5px;
+}
+
+.profile-card-actions button {
+    flex-grow: 1;
+    font-size: 0.8em;
+    padding: 8px 5px;
+}
+
+.profile-card-actions .view-btn {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.profile-card-actions .view-btn:hover {
+    background-color: var(--primary-color);
+}
+
+.profile-card-actions .delete-btn {
+    background-color: #f8d7da;
+    color: var(--danger-color);
+}
+
+.profile-card-actions .delete-btn:hover {
+    background-color: #f1b0b7;
+}
