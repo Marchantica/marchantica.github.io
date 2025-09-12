@@ -1,0 +1,115 @@
+/* --- VARIABLES Y ESTI'LOS GLOBALES --- */
+:root {
+    --primary-color: #4a69bd;
+    --secondary-color: #6a89cc;
+    --background-color: #f8f9fa;
+    --form-background: #ffffff;
+    --text-color: #343a40;
+    --border-color: #dee2e6;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-family); background-color: var(--background-color); color: var(--text-color); line-height: 1.6; }
+
+/* --- MAQUETACIÓN PRINCIPAL --- */
+.app-container { display: flex; min-height: 100vh; }
+.input-column { width: 40%; max-width: 500px; padding: 30px; background-color: var(--form-background); box-shadow: 2px 0 15px rgba(0,0,0,0.05); overflow-y: auto; }
+.output-column { flex-grow: 1; padding: 30px; overflow-y: auto; }
+.app-header h1 { color: var(--primary-color); margin-bottom: 5px; }
+.app-header p { color: #6c757d; margin-bottom: 25px; }
+
+/* --- ESTILOS DEL FORMULARIO --- */
+form fieldset { border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; margin-bottom: 25px; }
+form legend { font-weight: bold; color: var(--primary-color); padding: 0 10px; }
+form label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9em; }
+form input[type="text"], form input[type="email"], form input[type="tel"], form input[type="date"], form input[type="file"] { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 1em; }
+form input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(74, 105, 189, 0.2); }
+.form-entry-group { padding: 15px; border: 1px dashed var(--border-color); border-radius: 4px; margin-bottom: 15px; position: relative; }
+button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.9em; transition: background-color 0.2s; }
+form button[type="button"] { background-color: #e9ecef; color: var(--text-color); }
+form button[type="button"]:hover { background-color: #ced4da; }
+.save-button { width: 100%; padding: 15px; background-color: var(--success-color); color: white; font-size: 1.1em; }
+.save-button:hover { background-color: #218838; }
+
+/* --- COLUMNA DE SALIDA (DASHBOARD Y VISTA PREVIA) --- */
+.dashboard-section, .preview-section { background-color: var(--form-background); padding: 25px; border-radius: 8px; margin-bottom: 30px; }
+.dashboard-section h2, .preview-section h2, #preview-controls h3 { margin-top: 0; margin-bottom: 20px; color: var(--primary-color); }
+#preview-controls h3 { font-size: 1.1em; }
+.dashboard { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+.empty-dashboard-message { color: #6c757d; }
+.template-gallery { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+.template-thumbnail { border: 3px solid var(--border-color); border-radius: 6px; padding: 5px; cursor: pointer; transition: all 0.2s ease-in-out; text-align: center; background-color: #f8f9fa; }
+.template-thumbnail img { width: 100px; height: 141px; display: block; object-fit: cover; margin-bottom: 5px; border-radius: 3px; background: linear-gradient(45deg, #6a89cc, #b8a9c9); }
+.template-thumbnail .template-name { font-size: 0.85em; font-weight: 600; }
+.template-thumbnail.selected { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(74, 105, 189, 0.4); transform: scale(1.05); }
+#generate-pdf-btn { background-color: var(--primary-color); color: white; width: 100%; }
+#generate-pdf-btn:hover { background-color: #3b5998; }
+.profile-card { background-color: #f8f9fa; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; text-align: center; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden; }
+.profile-card:hover { transform: translateY(-5px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.profile-card-img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.profile-card-name { font-weight: 600; margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.profile-card-actions { display: flex; justify-content: space-around; gap: 5px; }
+.profile-card-actions button { flex-grow: 1; font-size: 0.8em; padding: 8px 5px; }
+.profile-card-actions .view-btn { background-color: var(--secondary-color); color: white; }
+.profile-card-actions .view-btn:hover { background-color: var(--primary-color); }
+.profile-card-actions .delete-btn { background-color: #f8d7da; color: var(--danger-color); }
+.profile-card-actions .delete-btn:hover { background-color: #f1b0b7; }
+
+/* --- VISTA PREVIA ESCALABLE --- */
+#preview-area { margin-top: 20px; border: 1px solid var(--border-color); background-color: #e9ecef; min-height: 500px; border-radius: 4px; overflow: hidden; position: relative; padding: 0; }
+#preview-area iframe { width: 794px; height: 1123px; transform-origin: top left; border: none; }
+
+/* --- MODAL DE RECORTE --- */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.modal-content { background-color: white; padding: 25px; border-radius: 8px; width: 90%; max-width: 600px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.modal-content h2 { margin-top: 0; margin-bottom: 20px; color: var(--primary-color); }
+.cropper-container { width: 100%; height: 400px; margin-bottom: 20px; background-color: #f0f0f0; }
+#image-to-crop { display: block; max-width: 100%; max-height: 400px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 15px; }
+.modal-actions .btn-primary { background-color: var(--primary-color); color: white; }
+.modal-actions .btn-secondary { background-color: #6c757d; color: white; }
+
+/* --- MEJORAS DE UX --- */
+#photo-preview-container { width: 120px; height: 120px; border-radius: 50%; overflow: hidden; margin-bottom: 15px; border: 3px solid var(--primary-color); box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+#photo-preview-img { width: 100%; height: 100%; object-fit: cover; }
+.file-status { display: inline-block; margin-top: -10px; margin-bottom: 15px; font-size: 0.8em; color: #6c757d; }
+#generate-pdf-btn:disabled { background-color: #ced4da; cursor: not-allowed; }
+.spinner { width: 60px; height: 60px; border: 8px solid #f3f3f3; border-top: 8px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* --- MEJORAS DE UX PARA FORMULARIO DE HABILIDADES/IDIOMAS --- */
+.fieldset-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.omit-btn { background: none; border: none; color: var(--secondary-color); font-size: 0.8em; cursor: pointer; padding: 5px; }
+.omit-btn:hover { text-decoration: underline; }
+.seccion-oculta > div, .seccion-oculta > button[id^="add-"] { display: none; }
+.level-selector-wrapper { display: flex; align-items: center; gap: 10px; }
+.level-indicator { font-size: 0.8em; color: #6c757d; }
+.level-selector { display: flex; gap: 5px; align-items: center; margin-top: 5px; }
+.level-selector .level-dot input[type="radio"] { display: none; }
+.level-selector .level-dot label { display: block; width: 20px; height: 20px; background-color: #e0e0e0; border-radius: 50%; cursor: pointer; transition: background-color 0.2s; }
+.level-selector .level-dot label:hover { background-color: #b0b0b0; }
+.level-selector .level-dot input[type="radio"]:checked + label { background-color: var(--primary-color); }
+.level-selector .level-dot:hover ~ .level-dot label { background-color: #b0b0b0; }
+.level-selector .level-dot input[type="radio"]:checked ~ .level-dot label { background-color: var(--primary-color); }
+
+/* --- NUEVOS ESTILOS PARA LA OPCIÓN "SIN EXPERIENCIA" --- */
+.optional-section-toggle {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+}
+.optional-section-toggle input[type="checkbox"] {
+    width: auto;
+    margin: 0 10px 0 0;
+}
+/* Oculta los campos de experiencia cuando la clase está presente */
+#experience-fieldset.fields-hidden #experience-fields-wrapper {
+    display: none;
+}
+
+/* --- DISEÑO RESPONSIVO --- */
+@media (max-width: 1024px) { .app-container { flex-direction: column; } .input-column { width: 100%; max-width: none; box-shadow: 0 2px 15px rgba(0,0,0,0.05); } }
