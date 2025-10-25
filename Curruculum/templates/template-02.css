@@ -1,0 +1,126 @@
+@import url('href="https://fonts.googleapis.com/css2?family=Italianno&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+body {
+    margin: 0;
+    font-family: "Italianno"; /* Fuente serif para el cuerpo */
+    font-style: italic;
+    color: #333;
+    background-color: #e0e0e0; /* Fondo gris para que la hoja resalte */
+    font-size: 10pt; /* Tamaño base para impresión */
+    line-height: 1.6;
+}
+
+.cv-container-serif {
+    background: white;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    box-sizing: border-box;
+}
+
+/* --- 2. CABECERA --- */
+.serif-header {
+    text-align: center;
+    margin-bottom: 15mm;
+}
+
+.photo-wrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 10mm auto;
+    border: 4px solid #000; /* Borde interior negro */
+    box-shadow: 0 0 0 1px #ccc; /* Borde exterior fino gris */
+}
+
+.photo-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.serif-header h1 {
+    font-family: "Italianno"; /* Fuente serif para el nombre */
+    font-size: 2.8em;
+    color: #000;
+    margin: 0;
+    font-weight: 700;
+}
+
+/* --- 3. CUERPO PRINCIPAL Y SECCIONES --- */
+.serif-main-content {
+    display: flex;
+    gap: 15mm; /* Espacio entre columnas */
+}
+
+.serif-column {
+    flex: 1; /* Ambas columnas ocupan el 50% */
+}
+
+.serif-section {
+    margin-bottom: 10mm;
+}
+
+.serif-title {
+    font-family: "Roboto";
+    font-size: 1.4em;
+    color: #000;
+    margin: 0 0 5mm 0;
+    padding-bottom: 2mm;
+    border-bottom: 1px solid #ccc;
+    font-weight: 700;
+}
+
+/* --- 4. LISTAS DE CONTENIDO --- */
+.data-list, .item-list, .item-list-languages {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.data-list li {
+    margin-bottom: 2mm;
+}
+
+.data-label {
+    font-weight: 700;
+}
+
+.item-list li {
+    margin-bottom: 4mm;
+}
+
+.item-title {
+    font-weight: 700;
+    display: block;
+}
+
+.item-subtitle {
+    display: block;
+    font-size: 0.9em;
+}
+
+.item-list-languages li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3mm;
+}
+
+.language-level-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.language-level-dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+}
+
+.language-level-dots .dot.filled {
+    background-color: #333;
+}
