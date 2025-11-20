@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <button onclick="vibrarSimple()">Vibrar Simple</button>
+    <button onclick="vibrarPatron()">Patrón (Estilo Mario)</button>
+    <button onclick="detener()">Detener</button>
+
+    <script>
+        function vibrarSimple() {
+            // Verifica si el navegador soporta la API
+            if (navigator.vibrate) {
+                navigator.vibrate(200);
+            } else {
+                alert("Tu dispositivo no soporta vibración");
+            }
+        }
+
+        function vibrarPatron() {
+            if (navigator.vibrate) {
+                // Vibra, pausa, vibra, pausa...
+                navigator.vibrate([125, 75, 125, 275, 200, 275, 200, 600, 200, 600]);
+            }
+        }
+
+        function detener() {
+            if (navigator.vibrate) {
+                navigator.vibrate(0);
+            }
+        }
+    </script>
+</body>
+</html>
