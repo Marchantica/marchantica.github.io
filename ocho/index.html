@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bird vs Traffic: City Chaos</title>
+    <style>
+        :root {
+            --bg-road: #34495e;
+            --bg-grass: #27ae60;
+            --ui-bg: #2c3e50;
+            --accent: #f1c40f;
+            --text: #ecf0f1;
+            --danger: #e74c3c;
+        }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--ui-bg);
+            color: var(--text);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* --- UI SUPERIOR (HUD) --- */
+        #hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #1a252f;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 20;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .stat-label { font-size: 0.7rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-value { color: var(--accent); font-size: 1.5rem; font-weight: bold; line-height: 1.2; }
+
+        /* --- REPRODUCTOR DE MÚSICA --- */
+        .music-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #btn-music {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Estado activo del botón */
+        #btn-music.playing {
+            background: var(--accent);
+            color: #1a252f;
+            box-shadow: 0 0 15px var(--accent);
+            animation: pulseMusic 1.5s infinite;
+        }
+
+        /* Animación visual de que está sonando */
+        @keyframes pulseMusic {
+            0% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(241, 196, 15, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0); }
+        }
+
+        /* --- ÁREA DE JUEGO --- */
+        #game-stage {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+            cursor: none; /* Cursor nativo oculto */
+            
+            background-color: var(--bg-road);
+            background-image: 
+                linear-gradient(90deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%),
+                linear-gradient(transparent 48%, #fff 48%, #fff 52%, transparent 52%);
+            background-size: 100px 100px;
+            animation: flyOverCity 2s linear infinite;
+        }
+
+        @keyframes flyOverCity {
+            from { background-position: 0 0; }
+            to { background-position: 0 100px; }
+        }
+
+        /* --- ENTIDADES --- */
+        #bird-container {
+            position: absolute;
+            top: -100px; left: -100px;
+            pointer-events: none;
+            z-index: 1000;
+            transition: transform 0.1s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #bird-body { font-size: 50px; z-index: 2; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2)); }
+        #bird-shadow {
+            width: 20px; height: 10px; background: rgba(0,0,0,0.5);
+            border-radius: 50%; margin-top: 20px; z-index: 1; filter: blur(2px);
+        }
+
+        .pecking #bird-body { animation: dive 0.2s ease-in-out; }
+        .pecking #bird-shadow { animation: shadowScale 0.2s ease-in-out; }
+        
+        @keyframes dive { 0% { transform: translateY(0); } 50% { transform: translateY(15px); } 100% { transform: translateY(0); } }
+        @keyframes shadowScale { 0% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.5); opacity: 0.8; } 100% { transform: scale(1); opacity: 0.5; } }
+
+        .car {
+            position: absolute; font-size: 40px; width: 50px; height: 50px;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; transition: transform 0.1s;
+            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.4));
+        }
+        .car:active { transform: scale(0.9); }
+
+        /* --- MENÚ --- */
+        #menu-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 62, 80, 0.95);
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 2000; text-align: center;
+        }
+        button.btn-action {
+            background: var(--accent); border: none; color: #333;
+            padding: 15px 40px; font-size: 1.5rem; font-weight: bold;
+            border-radius: 50px; cursor: pointer; margin-top: 20px;
+            box-shadow: 0 5px 0 #c0392b;
+        }
+        button.btn-action:active { transform: translateY(4px); box-shadow: none; }
+
+    </style>
+</head>
+<body>
+
+    <!-- UI SUPERIOR -->
+    <div id="hud">
+        <div class="stats-container">
+            <div class="stat-box">
+                <span class="stat-label">Tiempo</span>
+                <span id="timer" class="stat-value">30</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Puntos</span>
+                <span id="score" class="stat-value">0</span>
+            </div>
+        </div>
+        
+        <!-- BOTÓN DE MÚSICA -->
+        <div class="music-control">
+            <button id="btn-music" title="Reproducir Música">▶</button>
+        </div>
+    </div>
+
+    <!-- JUEGO -->
+    <div id="game-stage">
+        <div id="bird-container">
+            <div id="bird-body">🦅</div>
+            <div id="bird-shadow"></div>
+        </div>
+        <div id="traffic-layer"></div>
+        <div id="menu-overlay">
+            <h1>BIRD vs TRAFFIC</h1>
+            <p style="max-width: 80%; line-height: 1.5;">
+                Atrapa los coches, evita el tráfico.<br>
+                ¡Activa la música para más diversión! 🎵
+            </p>
+            <button id="btn-start" class="btn-action">DESPEGAR</button>
+        </div>
+    </div>
+
+<script>
+    // ==========================================
+    // 1. SISTEMA DE MÚSICA (Vanilla JS)
+    // ==========================================
+    
+    /* 
+       INSTRUCCIONES:
+       Agrega tus archivos mp3 en una carpeta 'assets/mp3' junto a este archivo HTML.
+       Luego cambia las URLs de abajo por: 'assets/mp3/tu-cancion.mp3'
+    */
+    const musicPlaylist = [
+        // Uso música online para la demo, cámbialo por tus rutas locales
+        'assets/mp3/track-1.mp3', // Canción 1 (Funky)
+        'assets/mp3/track-2.mp3'  // Canción 2 (Action)
+    ];
+
+    let currentTrackIndex = 0;
+    let isMusicPlaying = false;
+    const audioPlayer = new Audio();
+    const btnMusic = document.getElementById('btn-music');
+
+    // Configuración inicial del player
+    audioPlayer.volume = 0.4; // Volumen al 40% para no aturdir
+
+    // Función Principal: Toggle Play/Pause
+    btnMusic.addEventListener('click', () => {
+        if (isMusicPlaying) {
+            pauseMusic();
+        } else {
+            playMusic();
+        }
+    });
+
+    function playMusic() {
+        // Si no tiene fuente cargada, carga la actual
+        if (!audioPlayer.src || audioPlayer.src === window.location.href) {
+            audioPlayer.src = musicPlaylist[currentTrackIndex];
+        }
+        
+        audioPlayer.play().then(() => {
+            isMusicPlaying = true;
+            btnMusic.textContent = '⏸'; // Icono Pausa
+            btnMusic.classList.add('playing');
+        }).catch(e => console.log("Esperando interacción del usuario", e));
+    }
+
+    function pauseMusic() {
+        audioPlayer.pause();
+        isMusicPlaying = false;
+        btnMusic.textContent = '▶'; // Icono Play
+        btnMusic.classList.remove('playing');
+    }
+
+    // Evento: Cuando termina una canción, pasa a la siguiente
+    audioPlayer.addEventListener('ended', () => {
+        currentTrackIndex++;
+        if (currentTrackIndex >= musicPlaylist.length) {
+            currentTrackIndex = 0; // Volver al inicio
+        }
+        audioPlayer.src = musicPlaylist[currentTrackIndex];
+        audioPlayer.play();
+    });
+
+    // ==========================================
+    // 2. LÓGICA DEL JUEGO
+    // ==========================================
+    const stage = document.getElementById('game-stage');
+    const bird = document.getElementById('bird-container');
+    const trafficLayer = document.getElementById('traffic-layer');
+    const scoreEl = document.getElementById('score');
+    const timeEl = document.getElementById('timer');
+    const menu = document.getElementById('menu-overlay');
+    const btnStart = document.getElementById('btn-start');
+
+    let score = 0;
+    let timeLeft = 30;
+    let gameInterval = null;
+    let isPlaying = false;
+    const cars = ['🚗', '🚕', '🚙', '🚓', '🏎️', '🚚'];
+
+    // --- MOVIMIENTO DEL PÁJARO (Híbrido) ---
+    function moveBird(x, y) {
+        const rect = stage.getBoundingClientRect();
+        let localX = x - rect.left;
+        let localY = y - rect.top;
+        bird.style.left = (localX - 25) + 'px';
+        bird.style.top = (localY - 50) + 'px';
+    }
+
+    stage.addEventListener('mousemove', (e) => {
+        moveBird(e.clientX, e.clientY);
+        if (e.movementX > 0) bird.style.transform = "scaleX(-1)";
+        else if (e.movementX < 0) bird.style.transform = "scaleX(1)";
+    });
+    stage.addEventListener('mousedown', () => peck());
+
+    stage.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        moveBird(touch.clientX, touch.clientY);
+    }, { passive: false });
+    stage.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        moveBird(touch.clientX, touch.clientY);
+        peck();
+    }, { passive: false });
+
+    function peck() {
+        bird.classList.add('pecking');
+        setTimeout(() => bird.classList.remove('pecking'), 200);
+    }
+
+    // --- BUCLE DE JUEGO ---
+    btnStart.addEventListener('click', startGame);
+
+    function startGame() {
+        score = 0;
+        timeLeft = 30;
+        isPlaying = true;
+        updateHUD();
+        menu.style.display = 'none';
+        trafficLayer.innerHTML = '';
+
+        gameInterval = setInterval(() => {
+            timeLeft--;
+            updateHUD();
+            if (timeLeft <= 0) gameOver();
+        }, 1000);
+
+        spawnCar();
+    }
+
+    function spawnCar() {
+        if (!isPlaying) return;
+
+        const carEl = document.createElement('div');
+        carEl.classList.add('car');
+        carEl.textContent = cars[Math.floor(Math.random() * cars.length)];
+
+        const w = stage.clientWidth - 60;
+        const h = stage.clientHeight - 60;
+        const x = Math.random() * w;
+        const y = Math.random() * h;
+
+        carEl.style.left = x + 'px';
+        carEl.style.top = y + 'px';
+
+        // Dirección basada en posición
+        if (x < w / 2) carEl.style.transform = "rotate(180deg)";
+        else carEl.style.transform = "rotate(0deg)";
+
+        carEl.addEventListener('pointerdown', (e) => {
+            e.stopPropagation();
+            catchCar(carEl);
+        });
+
+        trafficLayer.appendChild(carEl);
+
+        setTimeout(() => {
+            if(carEl.parentNode) carEl.remove();
+            if(isPlaying && trafficLayer.childElementCount < 3) spawnCar(); 
+        }, 2000);
+
+        if (isPlaying) {
+            setTimeout(spawnCar, Math.random() * 800 + 400);
+        }
+    }
+
+    function catchCar(el) {
+        if (!isPlaying) return;
+        score += 10;
+        updateHUD();
+        el.style.transition = "all 0.1s";
+        el.style.transform = "scale(1.5) rotate(360deg)";
+        el.style.opacity = "0";
+        setTimeout(() => el.remove(), 100);
+        peck();
+    }
+
+    function updateHUD() {
+        scoreEl.textContent = score;
+        timeEl.textContent = timeLeft;
+        timeEl.style.color = timeLeft <= 5 ? "var(--danger)" : "var(--accent)";
+    }
+
+    function gameOver() {
+        isPlaying = false;
+        clearInterval(gameInterval);
+        
+        const h1 = menu.querySelector('h1');
+        const p = menu.querySelector('p');
+        h1.textContent = "¡FIN DEL VUELO!";
+        p.innerHTML = `Puntuación Final: <strong style="color:#f1c40f">${score}</strong><br>¿Otra ronda?`;
+        btnStart.textContent = "REINTENTAR";
+        menu.style.display = 'flex';
+    }
+
+</script>
+</body>
+</html>
