@@ -1,0 +1,100 @@
+* {
+    box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+
+}
+
+.logo {display: flex;
+height: 40pt;
+width: 100%;
+padding: 0;
+margin: 0;
+justify-content: center;
+text-align: center;
+position: sticky;
+z-index: 3;
+background-color: black;
+padding: 5px;
+align-items: center;
+z-index: 1;
+}
+
+.log {height: 30pt;}
+
+.ic {width: 600pt;margin: 0%;}
+
+body {background-color: gainsboro;margin: 0%;padding: 0%;}
+
+  .icomenu {width: 30pt;margin: 0pt;
+ display: block;
+right: 5pt;
+ transition: filter 0.5s ease;}
+
+  .header-principal {
+  background-color: black;
+  height: 60px;
+  position: relative; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- 2. OCULTAR EL CHECKBOX --- */
+.checkbox-oculto {
+  display: none; /* Nadie debe ver este cuadrito feo */
+}
+
+
+
+/* --- 3. EL ICONO HAMBURGUESA --- */
+.menu-hamburguesa {
+  position: absolute; /* Lo mandamos a la derecha */
+  right: 3pt;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  z-index: 1000; /* IMPORTANTE: Lo ponemos por encima de todo para poder cerrarlo después */
+  top: 2.5pt;
+}
+
+/* --- 4. EL MENÚ POP-OVER (CERRADO) --- */
+.menu-popover {
+  position: fixed; /* Fijo en la pantalla */
+  top: 0;
+  right: -100%; /* Lo escondemos fuera de la pantalla hacia la derecha */
+  width: 250px; /* Ancho de tu menú */
+  height: 100vh; /* Alto completo de la pantalla */
+  background-color: #1a1a1a;
+  padding-top: 80px; /* Espacio para que el icono hamburguesa no tape el primer enlace */
+    transition: all 0.5s ease-in-out; 
+  z-index: 999; /* Por debajo del icono hamburguesa */
+  box-shadow: -5px 0 15px rgba(0,0,0,0.5); /* Sombrita elegante */
+}
+
+/* Estilos básicos para los enlaces (opcional) */
+.menu-popover ul { list-style: none; padding: 0; margin: 0; }
+.menu-popover li a {
+  display: block;
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  padding: 15px 20px;
+  font-size: 18px;
+  border-bottom: 1px solid #7E9B26;
+  font-weight: 300;
+}
+
+/* --- 5. EL DETONADOR (¡AQUÍ SUCEDE LA MAGIA!) --- */
+/* Esta línea significa: Cuando el checkbox esté marcado (:checked), 
+   busca a su hermano (~) llamado .menu-popover y aplícale esto: */
+.checkbox-oculto:checked ~ .menu-popover {
+  right: 0;
+    background:  #A9D046;
+}
+
+.checkbox-oculto:checked ~ .menu-hamburguesa .icomenu {
+
+     filter: brightness(0.4);
+   
+     
+
+}
