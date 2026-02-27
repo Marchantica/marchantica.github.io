@@ -1,0 +1,205 @@
+* {
+    box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+
+
+}
+
+.logo {display: flex;
+height: 40pt;
+width: 100%;
+padding: 0;
+margin: 0;
+justify-content: center;
+text-align: center;
+position: sticky;
+z-index: 3;
+background-color: black;
+padding: 5px;
+align-items: center;
+z-index: 1;
+}
+
+.log {height: 20pt;}
+
+.ic {width: 600pt;margin: 0%;}
+
+body {background-color: gainsboro;margin: 0%;padding: 0%;}
+
+  .icomenu {width: 20pt;margin: 0pt;
+   
+ display: block;
+right: 5pt;
+transition: transform 0.5s ease-in;  }
+
+  .header-principal {
+  background-color: black;
+  height: 60px;
+  position: relative; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- 2. OCULTAR EL CHECKBOX --- */
+.checkbox-oculto {
+  display: none; /* Nadie debe ver este cuadrito feo */
+}
+
+
+
+/* --- 3. EL ICONO HAMBURGUESA --- */
+.menu-hamburguesa {
+  position: absolute; /* Lo mandamos a la derecha */
+  right: 4pt;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  z-index: 1000; /* IMPORTANTE: Lo ponemos por encima de todo para poder cerrarlo después */
+  top: 5pt;
+}
+
+/* --- 4. EL MENÚ POP-OVER (CERRADO) --- */
+.menu-popover {
+  position: fixed; /* Fijo en la pantalla */
+  top: 0;
+  right: -100%; /* Lo escondemos fuera de la pantalla hacia la derecha */
+  width: 250px; /* Ancho de tu menú */
+  height: 100vh; /* Alto completo de la pantalla */
+     background-color: rgba(169, 208, 70, 0.8);
+  padding-top: 80px; /* Espacio para que el icono hamburguesa no tape el primer enlace */
+    transition: all 0.5s ease-in-out; 
+  z-index: 999; /* Por debajo del icono hamburguesa */
+  box-shadow: -5px 0 15px rgba(0,0,0,0.5); /* Sombrita elegante */
+     
+
+
+  display: flex;
+  flex-direction: column; /* Apila los elementos de arriba hacia abajo */
+  padding-bottom: 20px; /* Un poco de espacio al final para que no toque el borde de la pantalla */
+}
+
+/* Estilos básicos para los enlaces (opcional) */
+.menu-popover ul { list-style: none; padding: 0; margin: 0; }
+.menu-popover li a {
+  display: block;
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  padding: 15px 20px;
+  font-size: 18px;
+  border-bottom: 1px solid #7E9B26;
+  font-weight: 300;
+}
+
+/* --- 5. EL DETONADOR (¡AQUÍ SUCEDE LA MAGIA!) --- */
+/* Esta línea significa: Cuando el checkbox esté marcado (:checked), 
+   busca a su hermano (~) llamado .menu-popover y aplícale esto: */
+.checkbox-oculto:checked ~ .menu-popover {
+  right: 0;
+    
+
+      backdrop-filter: blur(10px);
+ 
+   
+}
+
+.checkbox-oculto:checked ~ .menu-hamburguesa .icomenu {
+
+     filter: brightness(0.4);
+     transform: rotate(90deg); 
+  
+     
+   
+     
+
+}
+
+/* --- ESTILOS DEL PIE DEL MENÚ LATERAL --- */
+
+.pie-menu {
+  /* EL TRUCO ESTRELLA: Esto empuja el contenedor hacia el fondo, 
+     ocupando todo el espacio vacío que quede entre el <ul> y este div */
+  margin-top: auto; 
+  
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1); /* Una línea sutil para separarlo del resto */
+  padding-bottom: 40px;
+}
+
+/* Contenedor de los botones */
+.redes-sociales {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* Espacio entre los botones */
+  margin-bottom: 15px; /* Espacio entre los botones y la leyenda */
+}
+
+/* Estilo de los botones (Círculos) */
+.icono-red {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background-color: #1a1a1a; /* Color oscuro para contrastar con tu fondo verde */
+  color: white;
+  text-decoration: none;
+  border-radius: 50%; /* Los hace círculos perfectos */
+  font-size: 14px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Efecto al pasar el ratón por los botones */
+.icono-red:hover {
+  transform: translateY(-3px); /* Se levantan un poquito */
+  background-color: white;
+  color: #A9D046; /* Tu color verde */
+}
+
+/* Estilo de la leyenda */
+.leyenda-menu {
+  font-size: 12px;
+  color: #052700; /* Un texto oscuro pero no negro del todo */
+  margin: 0;
+  font-weight: 300;
+  letter-spacing: 1px; /* Separa un poquito las letras para que se vea más elegante */
+}
+
+.hero { position: relative;
+z-index: 2;   
+height: 50vh;
+ margin-top: -25vh;
+padding: 1vh;
+height: auto;
+    max-height: 50vh;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  flex-direction: column ;
+letter-spacing:-3px;
+font-family: "Roboto Flex", sans-serif;
+
+font-size: clamp(2rem, 3vw, 5rem);
+line-height: 200%;
+padding: 10pt;
+color: white;
+text-shadow: 4px 4px 5px rgba(0,0,0,0.3);} 
+
+.intro { position: relative;
+z-index: 1; 
+height: 50vh;  
+animation-name: port;
+animation-duration: 40s;
+animation-iteration-count: infinite;} 
+
+.portada {
+    width: 100%;
+    object-fit: cover;
+    border: 0;
+    margin: 0;
+    height:50vh;
+    font-weight: 100;
+}
+
+.tit {padding-left: 15pt;}
