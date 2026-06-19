@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Etiquetas Avanzado</title>
+    <!-- Fabric.js v5 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Lobster&family=Montserrat:wght@400;700&family=Pacifico&family=Playfair+Display:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --panel-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --text-color: #334155;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --accent: #0ea5e9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--panel-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            z-index: 10;
+        }
+
+        .header-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Paneles laterales */
+        .sidebar {
+            width: 300px;
+            background-color: var(--panel-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .sidebar-right {
+            width: 320px;
+            border-right: none;
+            border-left: 1px solid var(--border-color);
+        }
+
+        /* Area de Trabajo */
+        .canvas-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #cbd5e1;
+            position: relative;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .canvas-wrapper {
+            background-color: white;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-bottom: 10px;
+            margin-top: 18px;
+            font-weight: 700;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 4px;
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            width: 100%;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e2e8f0;
+        }
+
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        .control-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #475569;
+        }
+
+        select, input[type="text"], input[type="number"], input[type="range"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        /* Visor de Capas */
+        .layers-panel {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: #f8fafc;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .layer-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 10px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            background: white;
+            gap: 6px;
+        }
+
+        .layer-item:last-child {
+            border-bottom: none;
+        }
+
+        .layer-item.active {
+            background-color: #f0fdf4;
+            border-left: 3px solid var(--accent);
+        }
+
+        .layer-info {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .layer-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .layer-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 2px;
+            color: #64748b;
+        }
+
+        .layer-btn:hover {
+            color: var(--text-color);
+        }
+
+        /* Lista de Proyectos */
+        .project-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 180px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 6px;
+            margin-bottom: 12px;
+        }
+
+        .project-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px;
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .project-item-left {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .project-item img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            background-color: #e2e8f0;
+            margin-right: 6px;
+            border-radius: 4px;
+        }
+
+        /* Modal Inicial y Configuración */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(15, 23, 42, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            padding: 24px;
+            width: 380px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .flex-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .flex-row > * {
+            flex: 1;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* Ocultar elementos */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Asistente / Modal de Inicio -->
+    <div id="startupModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-title">Configurar Nueva Etiqueta</div>
+            <div class="control-group">
+                <label>Nombre del Proyecto</label>
+                <input type="text" id="initProjectName" value="Nueva Etiqueta">
+            </div>
+            <div class="control-group">
+                <label>Forma de la Etiqueta</label>
+                <select id="initShape">
+                    <option value="circle">Círculo (Redonda)</option>
+                    <option value="ellipse">Óvalo (Elíptica)</option>
+                    <option value="rectangle">Rectángulo</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Tamaño de Trabajo (Píxeles)</label>
+                <select id="initSize">
+                    <option value="350">Pequeña (350x350 px)</option>
+                    <option value="450" selected>Mediana (450x450 px)</option>
+                    <option value="550">Grande (550x550 px)</option>
+                </select>
+            </div>
+            <button class="btn" id="startProjectBtn">Crear Proyecto</button>
+        </div>
+    </div>
+
+    <!-- Barra Superior -->
+    <header>
+        <div class="header-title">
+            <span>Editor de Etiquetas</span>
+            <span style="font-size: 0.8rem; color: #64748b; font-weight: normal;" id="currentProjectDisplay"></span>
+        </div>
+        <div class="header-actions">
+            <!-- Botones Deshacer y Rehacer -->
+            <button class="btn btn-secondary" id="undoBtn" title="Deshacer (Ctrl+Z)" style="width: auto; padding: 6px 10px;">↩ Deshacer</button>
+            <button class="btn btn-secondary" id="redoBtn" title="Rehacer (Ctrl+Y)" style="width: auto; padding: 6px 10px;">↪ Rehacer</button>
+            
+            <input type="text" id="projectNameInput" style="width: 160px; height: 34px;" placeholder="Nombre">
+            <button class="btn" id="saveProjectBtn" style="width: auto; height: 34px;">Guardar Proyecto</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Panel Izquierdo: Gestión de proyectos y forma de etiqueta -->
+        <div class="sidebar">
+            <div class="section-title">Proyectos Guardados</div>
+            <div class="project-list" id="projectListContainer">
+                <div style="color: #9ca3af; font-size: 0.75rem; text-align: center; padding: 10px;">Sin proyectos</div>
+            </div>
+            <button class="btn btn-secondary" id="newProjectTriggerBtn" style="margin-bottom: 16px;">+ Nuevo Proyecto</button>
+
+            <div class="section-title">Forma Activa de la Etiqueta</div>
+            <select id="canvasShapeSelect">
+                <option value="circle">Círculo</option>
+                <option value="ellipse">Óvalo</option>
+                <option value="rectangle">Rectángulo</option>
+            </select>
+
+            <div class="section-title" style="margin-top: auto;">Exportación</div>
+            <button class="btn" id="exportBtn">Descargar Etiqueta (PNG)</button>
+        </div>
+
+        <!-- Área Central de Trabajo -->
+        <div class="canvas-area">
+            <div class="canvas-wrapper">
+                <canvas id="labelCanvas"></canvas>
+            </div>
+        </div>
+
+        <!-- Panel Derecho: Visor de capas y Propiedades del elemento activo -->
+        <div class="sidebar sidebar-right">
+            <!-- Visor de Capas -->
+            <div class="section-title">Visor de Capas</div>
+            <div class="layers-panel" id="layersList">
+                <div style="color: #9ca3af; font-size: 0.75rem; text-align: center; padding: 10px;">Sin capas de elementos</div>
+            </div>
+
+            <!-- Panel de Propiedades del Objeto Seleccionado -->
+            <div class="section-title">Propiedades del Elemento</div>
+            <div id="noSelectionMsg" style="color: #94a3b8; font-size: 0.75rem; text-align: center; padding: 12px; border: 1px dashed var(--border-color); border-radius: 6px;">
+                Selecciona un elemento en el lienzo para configurarlo.
+            </div>
+
+            <!-- Caja de propiedades activas -->
+            <div id="propertiesPanel" class="hidden">
+                <div class="control-group">
+                    <label>Organizar Capa</label>
+                    <div class="flex-row">
+                        <button class="btn btn-secondary" id="bringToFrontBtn" style="padding: 6px; font-size: 0.75rem;">Frente</button>
+                        <button class="btn btn-secondary" id="sendToBackBtn" style="padding: 6px; font-size: 0.75rem;">Fondo</button>
+                    </div>
+                </div>
+
+                <!-- Propiedades de Texto -->
+                <div id="textControls" class="hidden">
+                    <div class="control-group">
+                        <label>Contenido del Texto</label>
+                        <input type="text" id="textStringInput">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Tipografía</label>
+                        <select id="fontFamilySelect">
+                            <option value="Roboto" style="font-family: 'Roboto';">Roboto</option>
+                            <option value="Montserrat" style="font-family: 'Montserrat';">Montserrat</option>
+                            <option value="Playfair Display" style="font-family: 'Playfair Display';">Playfair</option>
+                            <option value="Lobster" style="font-family: 'Lobster';">Lobster</option>
+                            <option value="Pacifico" style="font-family: 'Pacifico';">Pacifico</option>
+                            <option value="Caveat" style="font-family: 'Caveat';">Caveat</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="flex-row">
+                            <div>
+                                <label>Tamaño</label>
+                                <input type="number" id="fontSizeInput" min="8" max="100">
+                            </div>
+                            <div>
+                                <label>Color</label>
+                                <input type="color" id="textColorInput" style="padding: 2px; height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lomo Circular / Curva Avanzada -->
+                    <div style="border-top: 1px dashed var(--border-color); padding-top: 10px; margin-top: 10px;">
+                        <div class="control-group" style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <input type="checkbox" id="curvedTextCheckbox" style="width: auto;">
+                            <label for="curvedTextCheckbox" style="margin-bottom: 0; cursor: pointer;">Habilitar Lomo Circular</label>
+                        </div>
+                        
+                        <div id="curveControls" class="hidden">
+                            <div class="control-group">
+                                <label id="radiusLabel">Radio del Lomo: 150px</label>
+                                <input type="range" id="curveRadiusInput" min="40" max="350" value="150">
+                            </div>
+                            <div class="control-group" style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" id="curveInvertCheckbox" style="width: auto;">
+                                <label for="curveInvertCheckbox" style="margin-bottom: 0;">Invertir curvatura (Lomo Inferior)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group" style="margin-top: 15px;">
+                    <button class="btn btn-danger" id="deleteElementBtn">Eliminar Elemento</button>
+                </div>
+            </div>
+
+            <!-- Añadir nuevos elementos -->
+            <div class="section-title">Añadir Capas</div>
+            <div class="flex-row">
+                <button class="btn btn-secondary" id="addTextBtn">Añadir Texto</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Cargar Imagen</button>
+                <input type="file" id="fileInput" accept="image/*">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. CONFIGURACIÓN DE BASE DE DATOS (IndexedDB) ---
+        const DB_NAME = "AdvancedLabelEditorDB";
+        const DB_VERSION = 1;
+        const STORE_NAME = "projects";
+        let db;
+
+        function initDatabase() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                request.onupgradeneeded = function(e) {
+                    const database = e.target.result;
+                    if (!database.objectStoreNames.contains(STORE_NAME)) {
+                        database.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+                    }
+                };
+                request.onsuccess = function(e) {
+                    db = e.target.result;
+                    resolve(db);
+                };
+                request.onerror = function(e) {
+                    reject(e.target.error);
+                };
+            });
+        }
+
+        // --- 2. CONFIGURACIÓN E INICIALIZACIÓN DEL CANVAS ---
+        const canvas = new fabric.Canvas('labelCanvas', {
+            backgroundColor: '#ffffff',
+            preserveObjectStacking: true
+        });
+
+        let currentShape = 'circle';
+        let currentProjectId = null;
+        let guideShapeObj = null;
+
+        // Ajuste de las dimensiones del canvas segun selección inicial
+        function setCanvasDimensions(size) {
+            canvas.setWidth(size);
+            canvas.setHeight(size);
+            canvas.calcOffset();
+        }
+
+        // --- 3. GESTIÓN DE HISTORIAL (Ctrl + Z / Ctrl + Y) ---
+        let undoStack = [];
+        let redoStack = [];
+        let isHistoryOperation = false;
+
+        function saveHistoryState() {
+            if (isHistoryOperation) return;
+            
+            // Serialización del canvas incluyendo los parámetros de corte
+            const currentState = {
+                shape: currentShape,
+                canvasData: JSON.stringify(canvas.toJSON(['clipPath', 'absolutePositioned']))
+            };
+
+            undoStack.push(currentState);
+            if (undoStack.length > 25) { // Límite de deshascer
+                undoStack.shift();
+            }
+            redoStack = []; // Limpiamos historial de rehacer al hacer cambios nuevos
+            updateLayersPanel();
+        }
+
+        function undo() {
+            if (undoStack.length <= 1) return; // Necesitamos al menos el estado previo para volver
+            
+            isHistoryOperation = true;
+            const current = undoStack.pop();
+            redoStack.push(current);
+
+            const prevState = undoStack[undoStack.length - 1];
+            applyState(prevState);
+        }
+
+        function redo() {
+            if (redoStack.length === 0) return;
+
+            isHistoryOperation = true;
+            const nextState = redoStack.pop();
+            undoStack.push(nextState);
+            applyState(nextState);
+        }
+
+        function applyState(state) {
+            currentShape = state.shape;
+            document.getElementById('canvasShapeSelect').value = state.shape;
+            
+            canvas.loadFromJSON(state.canvasData, () => {
+                applyLabelShape(currentShape);
+                canvas.renderAll();
+                updateLayersPanel();
+                isHistoryOperation = false;
+            });
+        }
+
+        // --- 4. ATTACHMENT DE TEXTO EN LOMO CIRCULAR ---
+        // Genera una curvatura matemática sobre un trazado nativo de arco
+        function updateTextCurve(textObj, isCurved, radius, invert = false) {
+            if (!textObj) return;
+
+            if (isCurved) {
+                const r = parseInt(radius);
+                // Si invertimos, curvamos en sentido antihorario o por debajo del lomo
+                const sweepFlag = invert ? 0 : 1;
+                const pathData = `M 0,${r} A ${r},${r} 0 0,${sweepFlag} ${r * 2},${r}`;
+                
+                const curvePath = new fabric.Path(pathData, {
+                    fill: 'transparent',
+                    stroke: 'transparent',
+                    visible: false
+                });
+
+                textObj.set({
+                    path: curvePath,
+                    textAlign: 'center'
+                });
+            } else {
+                textObj.set({
+                    path: null
+                });
+            }
+            canvas.renderAll();
+        }
+
+        // --- 5. VISUALIZACIÓN Y CORTE DE ETIQUETA ---
+        function applyLabelShape(shape) {
+            currentShape = shape;
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            
+            let clipPath;
+
+            if (guideShapeObj) {
+                canvas.remove(guideShapeObj);
+            }
+
+            const guideOptions = {
+                stroke: '#475569',
+                strokeDashArray: [4, 4],
+                strokeWidth: 1.5,
+                fill: 'transparent',
+                selectable: false,
+                evented: false,
+                excludeFromExport: true
+            };
+
+            if (shape === 'circle') {
+                const radius = (Math.min(width, height) / 2) - 15;
+                clipPath = new fabric.Circle({
+                    radius: radius,
+                    left: centerX - radius,
+                    top: centerY - radius,
+                    absolutePositioned: true
+                });
+                guideShapeObj = new fabric.Circle({
+                    ...guideOptions,
+                    radius: radius,
+                    left: centerX - radius,
+                    top: centerY - radius
+                });
+
+            } else if (shape === 'ellipse') {
+                const rx = (width / 2) - 15;
+                const ry = (height / 2) - 45;
+                clipPath = new fabric.Ellipse({
+                    rx: rx,
+                    ry: ry,
+                    left: centerX - rx,
+                    top: centerY - ry,
+                    absolutePositioned: true
+                });
+                guideShapeObj = new fabric.Ellipse({
+                    ...guideOptions,
+                    rx: rx,
+                    ry: ry,
+                    left: centerX - rx,
+                    top: centerY - ry
+                });
+
+            } else if (shape === 'rectangle') {
+                const w = width - 40;
+                const h = height - 60;
+                clipPath = new fabric.Rect({
+                    width: w,
+                    height: h,
+                    left: centerX - (w / 2),
+                    top: centerY - (h / 2),
+                    rx: 8,
+                    ry: 8,
+                    absolutePositioned: true
+                });
+                guideShapeObj = new fabric.Rect({
+                    ...guideOptions,
+                    width: w,
+                    height: h,
+                    left: centerX - (w / 2),
+                    top: centerY - (h / 2),
+                    rx: 8,
+                    ry: 8
+                });
+            }
+
+            canvas.clipPath = clipPath;
+            canvas.add(guideShapeObj);
+            guideShapeObj.sendToBack();
+            canvas.renderAll();
+        }
+
+        // --- 6. VISOR DE CAPAS ---
+        function updateLayersPanel() {
+            const listContainer = document.getElementById('layersList');
+            listContainer.innerHTML = '';
+            
+            // Los elementos en Fabric se ordenan de atrás hacia adelante en el array.
+            // Los renderizamos de arriba a abajo en la lista.
+            const objects = canvas.getObjects().filter(obj => obj !== guideShapeObj);
+
+            if (objects.length === 0) {
+                listContainer.innerHTML = '<div style="color: #9ca3af; font-size: 0.75rem; text-align: center; padding: 10px;">Sin capas de elementos</div>';
+                return;
+            }
+
+            for (let i = objects.length - 1; i >= 0; i--) {
+                const obj = objects[i];
+                const isSelected = canvas.getActiveObject() === obj;
+                
+                const item = document.createElement('div');
+                item.className = `layer-item ${isSelected ? 'active' : ''}`;
+
+                let label = "Objeto";
+                if (obj.type === 'i-text' || obj.type === 'text') {
+                    label = `T: "${obj.text.substring(0, 8)}${obj.text.length > 8 ? '...' : ''}"`;
+                } else if (obj.type === 'image') {
+                    label = 'Imagen';
+                }
+
+                item.innerHTML = `
+                    <div class="layer-info" title="Seleccionar">${label}</div>
+                    <div class="layer-controls">
+                        <input type="range" class="opacity-slider" min="0" max="1" step="0.05" value="${obj.opacity || 1}" title="Opacidad" style="width: 45px; height: 4px; padding: 0;">
+                        <button class="layer-btn visibility-btn" title="Mostrar/Ocultar">${obj.visible ? '👁️' : '👁️‍🗨️'}</button>
+                    </div>
+                `;
+
+                // Interacción de selección desde visor de capas
+                item.querySelector('.layer-info').addEventListener('click', () => {
+                    canvas.setActiveObject(obj);
+                    canvas.renderAll();
+                });
+
+                // Cambio de opacidad individual
+                const slider = item.querySelector('.opacity-slider');
+                slider.addEventListener('input', (e) => {
+                    obj.set('opacity', parseFloat(e.target.value));
+                    canvas.renderAll();
+                });
+                
+                slider.addEventListener('change', () => {
+                    saveHistoryState();
+                });
+
+                // Control de visibilidad
+                const visBtn = item.querySelector('.visibility-btn');
+                visBtn.addEventListener('click', () => {
+                    obj.set('visible', !obj.visible);
+                    visBtn.textContent = obj.visible ? '👁️' : '👁️‍🗨️';
+                    canvas.renderAll();
+                    saveHistoryState();
+                });
+
+                listContainer.appendChild(item);
+            }
+        }
+
+        // --- 7. PANEL DE CONTROL DE PROPIEDADES ---
+        const propertiesPanel = document.getElementById('propertiesPanel');
+        const noSelectionMsg = document.getElementById('noSelectionMsg');
+        const textControls = document.getElementById('textControls');
+        const textStringInput = document.getElementById('textStringInput');
+        const fontFamilySelect = document.getElementById('fontFamilySelect');
+        const fontSizeInput = document.getElementById('fontSizeInput');
+        const textColorInput = document.getElementById('textColorInput');
+        const curvedTextCheckbox = document.getElementById('curvedTextCheckbox');
+        const curveControls = document.getElementById('curveControls');
+        const curveRadiusInput = document.getElementById('curveRadiusInput');
+        const radiusLabel = document.getElementById('radiusLabel');
+        const curveInvertCheckbox = document.getElementById('curveInvertCheckbox');
+
+        canvas.on('selection:created', (e) => syncActiveObjectUI(e.selected[0]));
+        canvas.on('selection:updated', (e) => syncActiveObjectUI(e.selected[0]));
+        canvas.on('selection:cleared', clearActiveObjectUI);
+
+        function syncActiveObjectUI(obj) {
+            if (!obj || obj === guideShapeObj) {
+                clearActiveObjectUI();
+                return;
+            }
+
+            noSelectionMsg.classList.add('hidden');
+            propertiesPanel.classList.remove('hidden');
+
+            if (obj.type === 'text' || obj.type === 'i-text') {
+                textControls.classList.remove('hidden');
+                textStringInput.value = obj.text;
+                fontFamilySelect.value = obj.fontFamily;
+                fontSizeInput.value = obj.fontSize;
+                textColorInput.value = obj.fill;
+
+                if (obj.path) {
+                    curvedTextCheckbox.checked = true;
+                    curveControls.classList.remove('hidden');
+                    const r = Math.round(obj.path.width / 2) || 150;
+                    curveRadiusInput.value = r;
+                    radiusLabel.innerText = `Radio del Lomo: ${r}px`;
+                    // Comprobar la inclinación del arco basándonos en la trayectoria guardada
+                    curveInvertCheckbox.checked = obj.path.path[0][2] === 0;
+                } else {
+                    curvedTextCheckbox.checked = false;
+                    curveControls.classList.add('hidden');
+                }
+            } else {
+                textControls.classList.add('hidden');
+            }
+            updateLayersPanel();
+        }
+
+        function clearActiveObjectUI() {
+            noSelectionMsg.classList.remove('hidden');
+            propertiesPanel.classList.add('hidden');
+            updateLayersPanel();
+        }
+
+        // --- 8. EVENTOS DE EDICIÓN EN TIEMPO REAL ---
+        textStringInput.addEventListener('input', (e) => {
+            const active = canvas.getActiveObject();
+            if (active) {
+                active.set('text', e.target.value);
+                if (curvedTextCheckbox.checked) {
+                    updateTextCurve(active, true, parseInt(curveRadiusInput.value), curveInvertCheckbox.checked);
+                }
+                canvas.renderAll();
+            }
+        });
+        
+        textStringInput.addEventListener('change', saveHistoryState);
+
+        fontFamilySelect.addEventListener('change', (e) => {
+            const active = canvas.getActiveObject();
+            if (active) {
+                active.set('fontFamily', e.target.value);
+                canvas.renderAll();
+                saveHistoryState();
+            }
+        });
+
+        fontSizeInput.addEventListener('input', (e) => {
+            const active = canvas.getActiveObject();
+            if (active) {
+                active.set('fontSize', parseInt(e.target.value) || 12);
+                canvas.renderAll();
+            }
+        });
+
+        fontSizeInput.addEventListener('change', saveHistoryState);
+
+        textColorInput.addEventListener('change', (e) => {
+            const active = canvas.getActiveObject();
+            if (active) {
+                active.set('fill', e.target.value);
+                canvas.renderAll();
+                saveHistoryState();
+            }
+        });
+
+        curvedTextCheckbox.addEventListener('change', (e) => {
+            const active = canvas.getActiveObject();
+            if (active) {
+                if (e.target.checked) {
+                    curveControls.classList.remove('hidden');
+                    updateTextCurve(active, true, parseInt(curveRadiusInput.value), curveInvertCheckbox.checked);
+                } else {
+                    curveControls.classList.add('hidden');
+                    updateTextCurve(active, false);
+                }
+                saveHistoryState();
+            }
+        });
+
+        curveRadiusInput.addEventListener('input', (e) => {
+            const active = canvas.getActiveObject();
+            const radiusVal = parseInt(e.target.value);
+            radiusLabel.innerText = `Radio del Lomo: ${radiusVal}px`;
+            if (active && curvedTextCheckbox.checked) {
+                updateTextCurve(active, true, radiusVal, curveInvertCheckbox.checked);
+            }
+        });
+
+        curveRadiusInput.addEventListener('change', saveHistoryState);
+
+        curveInvertCheckbox.addEventListener('change', (e) => {
+            const active = canvas.getActiveObject();
+            if (active && curvedTextCheckbox.checked) {
+                updateTextCurve(active, true, parseInt(curveRadiusInput.value), e.target.checked);
+                saveHistoryState();
+            }
+        });
+
+        // Capas ordenar
+        document.getElementById('bringToFrontBtn').addEventListener('click', () => {
+            const active = canvas.getActiveObject();
+            if (active) {
+                active.bringToFront();
+                if (guideShapeObj) guideShapeObj.sendToBack();
+                canvas.renderAll();
+                saveHistoryState();
+            }
+        });
+
+        document.getElementById('sendToBackBtn').addEventListener('click', () => {
+            const active = canvas.getActiveObject();
+            if (active) {
+                active.sendToBack();
+                if (guideShapeObj) guideShapeObj.sendToBack();
+                canvas.renderAll();
+                saveHistoryState();
+            }
+        });
+
+        document.getElementById('deleteElementBtn').addEventListener('click', () => {
+            const active = canvas.getActiveObject();
+            if (active) {
+                canvas.remove(active);
+                canvas.discardActiveObject();
+                canvas.renderAll();
+                saveHistoryState();
+            }
+        });
+
+        // Registrar cambios para el historial
+        canvas.on('object:modified', saveHistoryState);
+        canvas.on('object:added', () => {
+            if (!isHistoryOperation) saveHistoryState();
+        });
+        canvas.on('object:removed', () => {
+            if (!isHistoryOperation) saveHistoryState();
+        });
+
+        // --- 9. ACCIONES AGREGAR ELEMENTOS ---
+        document.getElementById('addTextBtn').addEventListener('click', () => {
+            const text = new fabric.IText('Lomo Circular', {
+                left: canvas.width / 2 - 50,
+                top: canvas.height / 2 - 20,
+                fontFamily: 'Montserrat',
+                fontSize: 24,
+                fill: '#334155'
+            });
+            canvas.add(text);
+            canvas.setActiveObject(text);
+            canvas.renderAll();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                fabric.Image.fromURL(event.target.result, function(img) {
+                    img.scaleToWidth(150);
+                    img.set({
+                        left: canvas.width / 2 - 75,
+                        top: canvas.height / 2 - 75
+                    });
+                    canvas.add(img);
+                    canvas.setActiveObject(img);
+                    canvas.renderAll();
+                });
+            };
+            reader.readAsDataURL(file);
+            e.target.value = '';
+        });
+
+        // Modificar forma desde panel lateral manual
+        document.getElementById('canvasShapeSelect').addEventListener('change', (e) => {
+            applyLabelShape(e.target.value);
+            saveHistoryState();
+        });
+
+        // --- 10. ATAJOS DE TECLADO (Ctrl + Z / Ctrl + Y) ---
+        window.addEventListener('keydown', (e) => {
+            const isEditing = canvas.getActiveObject() && canvas.getActiveObject().isEditing;
+            if (isEditing) return; // Permitir escritura normal si se está modificando texto internamente
+
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+                e.preventDefault();
+                undo();
+            }
+            if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y')) {
+                e.preventDefault();
+                redo();
+            }
+        });
+
+        document.getElementById('undoBtn').addEventListener('click', undo);
+        document.getElementById('redoBtn').addEventListener('click', redo);
+
+        // --- 11. SISTEMA DE ASISTENTE INICIAL ---
+        const startupModal = document.getElementById('startupModal');
+        const startProjectBtn = document.getElementById('startProjectBtn');
+
+        startProjectBtn.addEventListener('click', () => {
+            const name = document.getElementById('initProjectName').value.trim() || "Nueva Etiqueta";
+            const shape = document.getElementById('initShape').value;
+            const size = parseInt(document.getElementById('initSize').value);
+
+            document.getElementById('projectNameInput').value = name;
+            document.getElementById('currentProjectDisplay').innerText = `(${name})`;
+            document.getElementById('canvasShapeSelect').value = shape;
+
+            startupModal.classList.add('hidden');
+            
+            // Asignar tamaño dinámico del lienzo
+            setCanvasDimensions(size);
+            canvas.clear();
+            applyLabelShape(shape);
+
+            // Reiniciar historial con el estado inicial limpio
+            undoStack = [];
+            redoStack = [];
+            currentProjectId = null;
+            saveHistoryState();
+        });
+
+        document.getElementById('newProjectTriggerBtn').addEventListener('click', () => {
+            if (confirm("¿Descartar cambios actuales y empezar uno nuevo?")) {
+                startupModal.classList.remove('hidden');
+            }
+        });
+
+        // --- 12. GUARDAR / CARGAR INDEXEDDB ---
+        document.getElementById('saveProjectBtn').addEventListener('click', () => {
+            const name = document.getElementById('projectNameInput').value.trim() || "Etiqueta Guardada";
+            document.getElementById('currentProjectDisplay').innerText = `(${name})`;
+
+            if (guideShapeObj) guideShapeObj.visible = false;
+            canvas.renderAll();
+
+            const thumbnail = canvas.toDataURL({ format: 'png', quality: 0.3, multiplier: 0.15 });
+
+            if (guideShapeObj) guideShapeObj.visible = true;
+            canvas.renderAll();
+
+            const projectData = {
+                name: name,
+                shape: currentShape,
+                canvasJSON: JSON.stringify(canvas.toJSON(['clipPath', 'absolutePositioned'])),
+                thumbnail: thumbnail,
+                updatedAt: new Date().getTime(),
+                canvasSize: canvas.width // Guardar ancho del lienzo de trabajo
+            };
+
+            if (currentProjectId !== null) {
+                projectData.id = currentProjectId;
+            }
+
+            const transaction = db.transaction([STORE_NAME], "readwrite");
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.put(projectData);
+
+            request.onsuccess = function(e) {
+                if (currentProjectId === null) {
+                    currentProjectId = e.target.result;
+                }
+                loadProjectsList();
+                alert("Proyecto guardado exitosamente.");
+            };
+        });
+
+        function loadProjectsList() {
+            const container = document.getElementById('projectListContainer');
+            container.innerHTML = '';
+
+            const transaction = db.transaction([STORE_NAME], "readonly");
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.getAll();
+
+            request.onsuccess = function(e) {
+                const list = e.target.result;
+                if (!list || list.length === 0) {
+                    container.innerHTML = `<div style="color: #9ca3af; font-size: 0.75rem; text-align: center; padding: 10px;">Sin proyectos</div>`;
+                    return;
+                }
+
+                list.sort((a,b) => b.updatedAt - a.updatedAt);
+
+                list.forEach(proj => {
+                    const item = document.createElement('div');
+                    item.className = 'project-item';
+                    if (proj.id === currentProjectId) {
+                        item.style.borderColor = 'var(--primary)';
+                    }
+
+                    item.innerHTML = `
+                        <div class="project-item-left" onclick="loadSavedProject(${proj.id})">
+                            <img src="${proj.thumbnail}" alt="preview">
+                            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <strong>${proj.name}</strong><br>
+                                <span style="font-size:0.65rem; color:#64748b;">${proj.shape} - ${proj.canvasSize}px</span>
+                            </div>
+                        </div>
+                        <button class="layer-btn" style="color:#ef4444;" onclick="deleteProject(${proj.id})">&times;</button>
+                    `;
+                    container.appendChild(item);
+                });
+            };
+        }
+
+        window.loadSavedProject = function(id) {
+            const transaction = db.transaction([STORE_NAME], "readonly");
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.get(id);
+
+            request.onsuccess = function(e) {
+                const proj = e.target.result;
+                if (!proj) return;
+
+                currentProjectId = proj.id;
+                document.getElementById('projectNameInput').value = proj.name;
+                document.getElementById('currentProjectDisplay').innerText = `(${proj.name})`;
+                document.getElementById('canvasShapeSelect').value = proj.shape;
+                startupModal.classList.add('hidden');
+
+                // Reestablecemos las dimensiones originales del lienzo guardado
+                const size = proj.canvasSize || 450;
+                setCanvasDimensions(size);
+
+                canvas.loadFromJSON(proj.canvasJSON, () => {
+                    applyLabelShape(proj.shape);
+                    canvas.renderAll();
+                    
+                    // Resetear pila de deshacer para evitar heredar estados de proyectos previos
+                    undoStack = [{
+                        shape: proj.shape,
+                        canvasData: proj.canvasJSON
+                    }];
+                    redoStack = [];
+                    updateLayersPanel();
+                });
+            };
+        };
+
+        window.deleteProject = function(id) {
+            if (confirm("¿Seguro que deseas eliminar este proyecto del historial?")) {
+                const transaction = db.transaction([STORE_NAME], "readwrite");
+                const store = transaction.objectStore(STORE_NAME);
+                store.delete(id).onsuccess = () => {
+                    if (currentProjectId === id) {
+                        currentProjectId = null;
+                        document.getElementById('projectNameInput').value = "Nueva Etiqueta";
+                        document.getElementById('currentProjectDisplay').innerText = "";
+                        canvas.clear();
+                        applyLabelShape('circle');
+                    }
+                    loadProjectsList();
+                };
+            }
+        };
+
+        // --- 13. EXPORTAR IMAGEN DE RESULTADO ---
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            if (guideShapeObj) {
+                guideShapeObj.visible = false;
+            }
+            canvas.renderAll();
+
+            const dataURL = canvas.toDataURL({
+                format: 'png',
+                quality: 1.0
+            });
+
+            if (guideShapeObj) {
+                guideShapeObj.visible = true;
+            }
+            canvas.renderAll();
+
+            const link = document.createElement('a');
+            link.download = `${document.getElementById('projectNameInput').value || 'etiqueta'}.png`;
+            link.href = dataURL;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // Inicialización de arranque
+        window.addEventListener('load', () => {
+            initDatabase().then(() => {
+                loadProjectsList();
+            });
+        });
+    </script>
+</body>
+</html>
