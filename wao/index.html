@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Editor de Etiquetas Adaptable</title>
+    <title>Editor de Stickers y Etiquetas</title>
     <!-- Fabric.js v5 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <!-- Google Fonts -->
@@ -69,9 +69,9 @@
             position: relative;
         }
 
-        /* Paneles laterales (Escritorio) */
+        /* Paneles laterales en Escritorio */
         .sidebar {
-            width: 300px;
+            width: 240px;
             background-color: var(--panel-bg);
             border-right: 1px solid var(--border-color);
             display: flex;
@@ -79,10 +79,11 @@
             overflow-y: auto;
             padding: 16px;
             transition: transform 0.3s ease;
+            flex-shrink: 0;
         }
 
         .sidebar-right {
-            width: 320px;
+            width: 280px;
             border-right: none;
             border-left: 1px solid var(--border-color);
         }
@@ -104,27 +105,26 @@
             background-color: white;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
             border-radius: 4px;
-            max-width: 100%;
-            max-height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
+            max-width: 100%;
+            max-height: 100%;
+            overflow: hidden;
         }
 
-        /* Estilos para escalar dinámicamente el Canvas de Fabric */
+        /* Contenedor responsivo del Canvas */
         .canvas-container {
+            position: relative;
             max-width: 100% !important;
-            max-height: 65vh !important;
-            width: auto !important;
-            height: auto !important;
-            touch-action: none; /* Evita scroll indeseado al arrastrar en táctil */
+            max-height: 70vh !important;
+            aspect-ratio: var(--canvas-aspect, 1 / 1); /* Se actualiza dinámicamente según la relación ancho/alto */
+            touch-action: none;
         }
 
         .upper-canvas, .lower-canvas {
-            max-width: 100% !important;
-            max-height: 100% !important;
-            width: auto !important;
-            height: auto !important;
+            width: 100% !important;
+            height: 100% !important;
         }
 
         .section-title {
@@ -158,7 +158,7 @@
             justify-content: center;
             align-items: center;
             gap: 6px;
-            min-height: 38px; /* Altura optimizada para toques táctiles */
+            min-height: 38px;
         }
 
         .btn:hover {
@@ -184,6 +184,23 @@
             background-color: #dc2626;
         }
 
+        .align-btn {
+            border: 1px solid var(--border-color);
+            background-color: #f8fafc;
+            color: #475569;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.75rem;
+            min-height: 34px;
+            border-radius: 4px;
+        }
+        
+        .align-btn.active-align {
+            background-color: #eeebff !important;
+            color: var(--primary) !important;
+            border-color: var(--primary) !important;
+        }
+
         .control-group {
             margin-bottom: 12px;
         }
@@ -206,20 +223,29 @@
             min-height: 36px;
         }
 
-        /* Visor de Capas */
+        /* Visor de Capas Independiente (Columna dedicada) */
+        .layers-wrapper-sidebar {
+            width: 240px;
+            background-color: var(--panel-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            flex-shrink: 0;
+        }
+
         .layers-panel {
             border: 1px solid var(--border-color);
             border-radius: 6px;
             background: #f8fafc;
-            max-height: 160px;
+            flex: 1;
             overflow-y: auto;
         }
 
         .layer-item {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 10px;
+            flex-direction: column;
+            padding: 10px;
             border-bottom: 1px solid var(--border-color);
             font-size: 0.75rem;
             background: white;
@@ -232,17 +258,17 @@
         }
 
         .layer-info {
-            flex: 1;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .layer-controls {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 6px;
         }
 
@@ -260,7 +286,7 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            max-height: 150px;
+            max-height: 180px;
             overflow-y: auto;
             border: 1px solid var(--border-color);
             border-radius: 6px;
@@ -296,7 +322,7 @@
             border-radius: 4px;
         }
 
-        /* Menú de pestañas para móviles (Se oculta en escritorio) */
+        /* Menú de pestañas para móviles */
         .mobile-tabs-bar {
             display: none;
             background-color: var(--panel-bg);
@@ -347,7 +373,7 @@
             border-radius: 8px;
             padding: 24px;
             width: 100%;
-            max-width: 380px;
+            max-width: 400px;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
@@ -374,7 +400,14 @@
             display: none !important;
         }
 
-        /* --- MEDIAS QUERIES PARA ADAPTABILIDAD A MÓVILES (< 768px) --- */
+        /* --- MEDIAS QUERIES ADAPTABILIDAD --- */
+        @media (max-width: 1024px) {
+            /* Compactar las columnas en pantallas medianas */
+            .sidebar { width: 200px; }
+            .layers-wrapper-sidebar { width: 200px; }
+            .sidebar-right { width: 240px; }
+        }
+
         @media (max-width: 768px) {
             header {
                 height: auto;
@@ -400,41 +433,43 @@
 
             .main-container {
                 flex-direction: column;
-                height: calc(100vh - 120px); /* Ajuste dinámico de espacio */
+                height: calc(100vh - 120px);
             }
 
-            /* Ocultar todos los paneles por defecto y mostrarlos según la pestaña activa */
-            .sidebar, .canvas-area {
+            /* Ocultar columnas para el sistema de pestañas móvil */
+            .sidebar, .layers-wrapper-sidebar, .sidebar-right, .canvas-area {
                 display: none !important;
                 width: 100% !important;
                 height: 100% !important;
                 flex: 1;
+                border: none;
             }
 
-            /* Clase de visualización para pestaña activa */
             .active-mobile-panel {
                 display: flex !important;
             }
 
-            .sidebar-right {
-                border-left: none;
-            }
-
-            /* Mostrar barra de pestañas móviles */
             .mobile-tabs-bar {
                 display: flex;
             }
 
-            /* Espaciado del lienzo en teléfonos móviles */
             .canvas-area {
                 padding: 8px;
+            }
+
+            .canvas-wrapper {
+                width: 90vw;
+                height: auto;
+                aspect-ratio: var(--canvas-aspect, 1 / 1);
+                max-width: 450px;
+                max-height: 450px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Asistente de Inicio -->
+    <!-- Asistente de Inicio / Modal -->
     <div id="startupModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-title">Configurar Nueva Etiqueta</div>
@@ -442,20 +477,38 @@
                 <label>Nombre del Proyecto</label>
                 <input type="text" id="initProjectName" value="Nueva Etiqueta">
             </div>
+            
             <div class="control-group">
-                <label>Forma de la Etiqueta</label>
-                <select id="initShape">
-                    <option value="circle">Círculo (Redonda)</option>
-                    <option value="ellipse">Óvalo (Elíptica)</option>
-                    <option value="rectangle">Rectángulo</option>
+                <label>Formato / Proporción de Medidas</label>
+                <select id="initFormat">
+                    <option value="1:1" selected>Proporcional (1:1 / Cuadrado)</option>
+                    <option value="variable">Variable (Rectangular / Libre)</option>
                 </select>
             </div>
+
             <div class="control-group">
-                <label>Tamaño de Trabajo (Píxeles)</label>
-                <select id="initSize">
-                    <option value="350">Pequeña (350x350 px)</option>
-                    <option value="450" selected>Mediana (450x450 px)</option>
-                    <option value="550">Grande (550x550 px)</option>
+                <div class="flex-row">
+                    <div>
+                        <label id="widthLabel">Ancho (cm)</label>
+                        <input type="number" id="initWidthCm" min="3" max="20" step="0.5" value="10">
+                    </div>
+                    <div>
+                        <label id="heightLabel">Alto (cm)</label>
+                        <input type="number" id="initHeightCm" min="3" max="20" step="0.5" value="10" disabled>
+                    </div>
+                </div>
+                <span style="font-size: 0.65rem; color: #64748b; margin-top: 4px; display: block;">Rango admitido: Mínimo 3 cm | Máximo 20 cm.</span>
+            </div>
+
+            <div class="control-group">
+                <label>Forma Inicial del Sticker</label>
+                <select id="initShape">
+                    <option value="circle">Círculo</option>
+                    <option value="ellipse" disabled>Óvalo (Solo formato variable)</option>
+                    <option value="rectangle">Rectángulo</option>
+                    <option value="heart">Corazón</option>
+                    <option value="diamond">Rombo</option>
+                    <option value="triangle">Triángulo</option>
                 </select>
             </div>
             <button class="btn" id="startProjectBtn">Crear Proyecto</button>
@@ -477,41 +530,52 @@
     </header>
 
     <div class="main-container">
-        <!-- Panel Izquierdo: Gestión de proyectos y forma de etiqueta (Tab 1 en móviles) -->
+        <!-- 1. Columna Izquierda: Proyectos y Forma Base (Tab 1 en Móvil) -->
         <div class="sidebar" id="panel-projects">
             <div class="section-title">Proyectos Guardados</div>
             <div class="project-list" id="projectListContainer">
-                <div style="color: #9ca3af; font-size: 0.75rem; text-align: center; padding: 10px;">Sin proyectos</div>
+                <div style="color: #9ca3af; font-size: 0.75rem; text-align: center; padding: 10px;">Cargando...</div>
             </div>
             <button class="btn btn-secondary" id="newProjectTriggerBtn" style="margin-bottom: 16px;">+ Nuevo Proyecto</button>
 
-            <div class="section-title">Forma Activa de la Etiqueta</div>
+            <div class="section-title">Cambiar Forma Base</div>
             <select id="canvasShapeSelect">
                 <option value="circle">Círculo</option>
                 <option value="ellipse">Óvalo</option>
                 <option value="rectangle">Rectángulo</option>
+                <option value="heart">Corazón</option>
+                <option value="diamond">Rombo</option>
+                <option value="triangle">Triángulo</option>
             </select>
 
             <div class="section-title" style="margin-top: auto;">Exportación</div>
             <button class="btn" id="exportBtn">Descargar Etiqueta (PNG)</button>
         </div>
 
-        <!-- Área Central de Trabajo (Tab 2 en móviles) -->
+        <!-- 2. Columna Separada: Visor de Capas Fijo (Tab 2 en Móvil) -->
+        <div class="layers-wrapper-sidebar" id="panel-layers">
+            <div class="section-title">Visor de Capas</div>
+            <div class="layers-panel" id="layersList">
+                <div style="color: #9ca3af; font-size: 0.75rem; text-align: center; padding: 10px;">Sin capas de elementos</div>
+            </div>
+        </div>
+
+        <!-- 3. Columna Central: Área de Edición (Tab 3 en Móvil) -->
         <div class="canvas-area active-mobile-panel" id="panel-editor">
             <div class="canvas-wrapper">
                 <canvas id="labelCanvas"></canvas>
             </div>
         </div>
 
-        <!-- Panel Derecho: Visor de capas y propiedades (Tab 3 en móviles) -->
+        <!-- 4. Columna Derecha: Propiedades y Agregar Capas (Tab 4 en Móvil) -->
         <div class="sidebar sidebar-right" id="panel-properties">
-            <!-- Visor de Capas -->
-            <div class="section-title">Visor de Capas</div>
-            <div class="layers-panel" id="layersList">
-                <div style="color: #9ca3af; font-size: 0.75rem; text-align: center; padding: 10px;">Sin capas de elementos</div>
+            <div class="section-title">Añadir Capas</div>
+            <div class="flex-row" style="margin-bottom: 14px;">
+                <button class="btn btn-secondary" id="addTextBtn">Texto</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Imagen</button>
+                <input type="file" id="fileInput" accept="image/*">
             </div>
 
-            <!-- Panel de Propiedades -->
             <div class="section-title">Propiedades del Elemento</div>
             <div id="noSelectionMsg" style="color: #94a3b8; font-size: 0.75rem; text-align: center; padding: 12px; border: 1px dashed var(--border-color); border-radius: 6px;">
                 Selecciona un elemento en el lienzo para configurarlo.
@@ -526,7 +590,7 @@
                     </div>
                 </div>
 
-                <!-- Propiedades de Texto -->
+                <!-- Propiedades específicas de texto -->
                 <div id="textControls" class="hidden">
                     <div class="control-group">
                         <label>Contenido del Texto</label>
@@ -558,7 +622,46 @@
                         </div>
                     </div>
 
-                    <!-- Lomo Circular / Curva Avanzada -->
+                    <!-- Alineación del Párrafo -->
+                    <div class="control-group">
+                        <label>Alineación del Texto</label>
+                        <div class="flex-row">
+                            <button class="align-btn" data-align="left">Izq</button>
+                            <button class="align-btn" data-align="center">Centrar</button>
+                            <button class="align-btn" data-align="right">Der</button>
+                        </div>
+                    </div>
+
+                    <!-- Espaciado e interlineado -->
+                    <div class="control-group">
+                        <div class="flex-row">
+                            <div>
+                                <label id="charSpacingLabel">Espacio Letras (0)</label>
+                                <input type="range" id="charSpacingInput" min="-100" max="400" value="0">
+                            </div>
+                            <div>
+                                <label id="lineHeightLabel">Interlineado (1.15)</label>
+                                <input type="range" id="lineHeightInput" min="0.5" max="2.5" step="0.1" value="1.15">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Borde de Texto (Contorno) -->
+                    <div class="control-group" style="border-top: 1px dashed var(--border-color); padding-top: 10px;">
+                        <label style="font-weight:700;">Contorno / Borde de Texto</label>
+                        <div class="flex-row" style="align-items: center;">
+                            <div style="flex: 2;">
+                                <label id="strokeWidthLabel">Grosor: 0px</label>
+                                <input type="range" id="strokeWidthInput" min="0" max="12" value="0" step="1">
+                            </div>
+                            <div style="flex: 1;">
+                                <label>Color</label>
+                                <input type="color" id="strokeColorInput" value="#000000" style="padding: 2px; height: 36px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lomo Circular -->
                     <div style="border-top: 1px dashed var(--border-color); padding-top: 10px; margin-top: 10px;">
                         <div class="control-group" style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                             <input type="checkbox" id="curvedTextCheckbox" style="width: auto;">
@@ -582,22 +685,18 @@
                     <button class="btn btn-danger" id="deleteElementBtn" style="min-height: 34px;">Eliminar Elemento</button>
                 </div>
             </div>
-
-            <!-- Añadir nuevos elementos -->
-            <div class="section-title">Añadir Capas</div>
-            <div class="flex-row">
-                <button class="btn btn-secondary" id="addTextBtn">Añadir Texto</button>
-                <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Cargar Imagen</button>
-                <input type="file" id="fileInput" accept="image/*">
-            </div>
         </div>
     </div>
 
-    <!-- Barra de Pestañas Inferiores (Solo visible en móviles) -->
+    <!-- Barra de Pestañas Inferiores (Móviles) -->
     <div class="mobile-tabs-bar">
         <button class="mobile-tab-btn" data-target="panel-projects">
             <span>📁</span>
             <span>Proyectos</span>
+        </button>
+        <button class="mobile-tab-btn" data-target="panel-layers">
+            <span>🥞</span>
+            <span>Capas</span>
         </button>
         <button class="mobile-tab-btn active" data-target="panel-editor">
             <span>🎨</span>
@@ -605,37 +704,172 @@
         </button>
         <button class="mobile-tab-btn" data-target="panel-properties">
             <span>✏️</span>
-            <span>Capas & Props</span>
+            <span>Props</span>
         </button>
     </div>
 
     <script>
-        // --- 1. CONFIGURACIÓN DE BASE DE DATOS (IndexedDB) ---
-        const DB_NAME = "AdvancedLabelEditorDB";
+        // Relación de conversión: 1 cm = 35 píxeles en pantalla
+        const CM_TO_PX = 35; 
+
+        // --- 1. CONFIGURACIÓN DE BASE DE DATOS (IndexedDB / Fallback) ---
+        const DB_NAME = "AdvancedLabelEditorDB_v3";
         const DB_VERSION = 1;
         const STORE_NAME = "projects";
-        let db;
+        let db = null;
 
         function initDatabase() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(DB_NAME, DB_VERSION);
-                request.onupgradeneeded = function(e) {
-                    const database = e.target.result;
-                    if (!database.objectStoreNames.contains(STORE_NAME)) {
-                        database.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+            return new Promise((resolve) => {
+                try {
+                    if (!window.indexedDB) {
+                        resolve(null);
+                        return;
                     }
-                };
-                request.onsuccess = function(e) {
-                    db = e.target.result;
-                    resolve(db);
-                };
-                request.onerror = function(e) {
-                    reject(e.target.error);
-                };
+                    const request = indexedDB.open(DB_NAME, DB_VERSION);
+                    request.onupgradeneeded = function(e) {
+                        const database = e.target.result;
+                        if (!database.objectStoreNames.contains(STORE_NAME)) {
+                            database.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+                        }
+                    };
+                    request.onsuccess = function(e) {
+                        db = e.target.result;
+                        resolve(db);
+                    };
+                    request.onerror = function() {
+                        resolve(null);
+                    };
+                } catch (err) {
+                    resolve(null);
+                }
             });
         }
 
-        // --- 2. CONFIGURACIÓN E INICIALIZACIÓN DEL CANVAS ---
+        function persistProject(projectData) {
+            return new Promise((resolve, reject) => {
+                if (db) {
+                    const transaction = db.transaction([STORE_NAME], "readwrite");
+                    const store = transaction.objectStore(STORE_NAME);
+                    const request = store.put(projectData);
+                    request.onsuccess = (e) => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                } else {
+                    try {
+                        let localProjects = JSON.parse(localStorage.getItem('label_editor_projects_backup') || '[]');
+                        if (projectData.id) {
+                            const idx = localProjects.findIndex(p => p.id === projectData.id);
+                            if (idx !== -1) localProjects[idx] = projectData;
+                            else localProjects.push(projectData);
+                        } else {
+                            projectData.id = Date.now();
+                            localProjects.push(projectData);
+                        }
+                        localStorage.setItem('label_editor_projects_backup', JSON.stringify(localProjects));
+                        resolve(projectData.id);
+                    } catch(err) {
+                        alert("Límite de espacio en memoria excedido. Intenta reducir las dimensiones de las imágenes.");
+                        reject(err);
+                    }
+                }
+            });
+        }
+
+        function fetchAllProjects() {
+            return new Promise((resolve) => {
+                if (db) {
+                    const transaction = db.transaction([STORE_NAME], "readonly");
+                    const store = transaction.objectStore(STORE_NAME);
+                    const request = store.getAll();
+                    request.onsuccess = (e) => resolve(e.target.result || []);
+                    request.onerror = () => resolve([]);
+                } else {
+                    try {
+                        const local = JSON.parse(localStorage.getItem('label_editor_projects_backup') || '[]');
+                        resolve(local);
+                    } catch(e) {
+                        resolve([]);
+                    }
+                }
+            });
+        }
+
+        function fetchSingleProject(id) {
+            return new Promise((resolve, reject) => {
+                if (db) {
+                    const transaction = db.transaction([STORE_NAME], "readonly");
+                    const store = transaction.objectStore(STORE_NAME);
+                    const request = store.get(id);
+                    request.onsuccess = (e) => resolve(e.target.result);
+                    request.onerror = (e) => reject(e.target.error);
+                } else {
+                    try {
+                        const local = JSON.parse(localStorage.getItem('label_editor_projects_backup') || '[]');
+                        const found = local.find(p => p.id === id);
+                        resolve(found);
+                    } catch(e) {
+                        reject(e);
+                    }
+                }
+            });
+        }
+
+        function removeProject(id) {
+            return new Promise((resolve, reject) => {
+                if (db) {
+                    const transaction = db.transaction([STORE_NAME], "readwrite");
+                    const store = transaction.objectStore(STORE_NAME);
+                    const request = store.delete(id);
+                    request.onsuccess = () => resolve();
+                    request.onerror = (e) => reject(e.target.error);
+                } else {
+                    try {
+                        let local = JSON.parse(localStorage.getItem('label_editor_projects_backup') || '[]');
+                        local = local.filter(p => p.id !== id);
+                        localStorage.setItem('label_editor_projects_backup', JSON.stringify(local));
+                        resolve();
+                    } catch(e) {
+                        reject(e);
+                    }
+                }
+            });
+        }
+
+        // --- 2. CONFIGURACIÓN DEL ASISTENTE INICIAL (Modo proporcional vs variable) ---
+        const initFormat = document.getElementById('initFormat');
+        const initWidthCm = document.getElementById('initWidthCm');
+        const initHeightCm = document.getElementById('initHeightCm');
+        const initShape = document.getElementById('initShape');
+
+        initFormat.addEventListener('change', () => {
+            if (initFormat.value === '1:1') {
+                initHeightCm.value = initWidthCm.value;
+                initHeightCm.disabled = true;
+                // Deshabilitar la opción óvalo porque requiere proporciones variables
+                initShape.querySelector('option[value="ellipse"]').disabled = true;
+                if (initShape.value === 'ellipse') {
+                    initShape.value = 'circle';
+                }
+            } else {
+                initHeightCm.disabled = false;
+                initShape.querySelector('option[value="ellipse"]').disabled = false;
+            }
+        });
+
+        initWidthCm.addEventListener('input', () => {
+            // Validar límites de 3 a 20 cm
+            let val = parseFloat(initWidthCm.value);
+            if (val > 20) initWidthCm.value = 20;
+            if (initFormat.value === '1:1') {
+                initHeightCm.value = initWidthCm.value;
+            }
+        });
+
+        initHeightCm.addEventListener('input', () => {
+            let val = parseFloat(initHeightCm.value);
+            if (val > 20) initHeightCm.value = 20;
+        });
+
+        // --- 3. INICIALIZACIÓN DEL CANVAS ---
         const canvas = new fabric.Canvas('labelCanvas', {
             backgroundColor: '#ffffff',
             preserveObjectStacking: true
@@ -645,13 +879,18 @@
         let currentProjectId = null;
         let guideShapeObj = null;
 
-        function setCanvasDimensions(size) {
-            canvas.setWidth(size);
-            canvas.setHeight(size);
+        function setCanvasDimensions(width, height) {
+            canvas.setWidth(width);
+            canvas.setHeight(height);
             canvas.calcOffset();
+            // Declaración responsiva para mantener la relación de aspecto en CSS móvil
+            const wrapper = document.querySelector('.canvas-wrapper');
+            if (wrapper) {
+                wrapper.style.setProperty('--canvas-aspect', `${width} / ${height}`);
+            }
         }
 
-        // --- 3. GESTIÓN DE HISTORIAL (Ctrl + Z / Ctrl + Y) ---
+        // --- 4. GESTIÓN DE HISTORIAL (Ctrl + Z / Ctrl + Y) ---
         let undoStack = [];
         let redoStack = [];
         let isHistoryOperation = false;
@@ -702,7 +941,7 @@
             });
         }
 
-        // --- 4. ATTACHMENT DE TEXTO EN LOMO CIRCULAR ---
+        // --- 5. TEXTO EN LOMO CIRCULAR ---
         function updateTextCurve(textObj, isCurved, radius, invert = false) {
             if (!textObj) return;
 
@@ -729,13 +968,14 @@
             canvas.renderAll();
         }
 
-        // --- 5. VISUALIZACIÓN Y CORTE DE ETIQUETA ---
+        // --- 6. GUÍAS Y RECORTE (NUEVAS FORMAS) ---
         function applyLabelShape(shape) {
             currentShape = shape;
-            const width = canvas.width;
-            const height = canvas.height;
-            const centerX = width / 2;
-            const centerY = height / 2;
+            const w = canvas.width;
+            const h = canvas.height;
+            const centerX = w / 2;
+            const centerY = h / 2;
+            const pad = 15; // Margen de corte
             
             let clipPath;
 
@@ -754,7 +994,7 @@
             };
 
             if (shape === 'circle') {
-                const radius = (Math.min(width, height) / 2) - 15;
+                const radius = (Math.min(w, h) / 2) - pad;
                 clipPath = new fabric.Circle({
                     radius: radius,
                     left: centerX - radius,
@@ -769,8 +1009,8 @@
                 });
 
             } else if (shape === 'ellipse') {
-                const rx = (width / 2) - 15;
-                const ry = (height / 2) - 45;
+                const rx = (w / 2) - pad;
+                const ry = (h / 2) - pad;
                 clipPath = new fabric.Ellipse({
                     rx: rx,
                     ry: ry,
@@ -787,25 +1027,63 @@
                 });
 
             } else if (shape === 'rectangle') {
-                const w = width - 40;
-                const h = height - 60;
+                const rw = w - (pad * 2);
+                const rh = h - (pad * 2);
                 clipPath = new fabric.Rect({
-                    width: w,
-                    height: h,
-                    left: centerX - (w / 2),
-                    top: centerY - (h / 2),
+                    width: rw,
+                    height: rh,
+                    left: centerX - (rw / 2),
+                    top: centerY - (rh / 2),
                     rx: 8,
                     ry: 8,
                     absolutePositioned: true
                 });
                 guideShapeObj = new fabric.Rect({
                     ...guideOptions,
-                    width: w,
-                    height: h,
-                    left: centerX - (w / 2),
-                    top: centerY - (h / 2),
+                    width: rw,
+                    height: rh,
+                    left: centerX - (rw / 2),
+                    top: centerY - (rh / 2),
                     rx: 8,
                     ry: 8
+                });
+
+            } else if (shape === 'triangle') {
+                // Triángulo alineado a los bordes de seguridad
+                const pathData = `M ${centerX} ${pad} L ${w - pad} ${h - pad} L ${pad} ${h - pad} Z`;
+                clipPath = new fabric.Path(pathData, {
+                    absolutePositioned: true
+                });
+                guideShapeObj = new fabric.Path(pathData, {
+                    ...guideOptions
+                });
+
+            } else if (shape === 'diamond') {
+                // Rombo perfecto adaptable
+                const pathData = `M ${centerX} ${pad} L ${w - pad} ${centerY} L ${centerX} ${h - pad} L ${pad} ${centerY} Z`;
+                clipPath = new fabric.Path(pathData, {
+                    absolutePositioned: true
+                });
+                guideShapeObj = new fabric.Path(pathData, {
+                    ...guideOptions
+                });
+
+            } else if (shape === 'heart') {
+                // Corazón proporcional con curvas de Bézier
+                const scaleX = (w - pad * 2) / 180 * 0.95;
+                const scaleY = (h - pad * 2) / 200 * 0.95;
+                
+                const pathData = `M ${centerX} ${centerY + 90 * scaleY} 
+                  C ${centerX} ${centerY + 70 * scaleY} ${centerX + 90 * scaleX} ${centerY + 10 * scaleY} ${centerX + 90 * scaleX} ${centerY - 50 * scaleY} 
+                  C ${centerX + 90 * scaleX} ${centerY - 110 * scaleY} ${centerX + 30 * scaleX} ${centerY - 110 * scaleY} ${centerX} ${centerY - 70 * scaleY} 
+                  C ${centerX - 30 * scaleX} ${centerY - 110 * scaleY} ${centerX - 90 * scaleX} ${centerY - 110 * scaleY} ${centerX - 90 * scaleX} ${centerY - 50 * scaleY} 
+                  C ${centerX - 90 * scaleX} ${centerY + 10 * scaleY} ${centerX} ${centerY + 70 * scaleY} ${centerX} ${centerY + 90 * scaleY} Z`;
+
+                clipPath = new fabric.Path(pathData, {
+                    absolutePositioned: true
+                });
+                guideShapeObj = new fabric.Path(pathData, {
+                    ...guideOptions
                 });
             }
 
@@ -815,7 +1093,7 @@
             canvas.renderAll();
         }
 
-        // --- 6. VISOR DE CAPAS ---
+        // --- 7. VISOR DE CAPAS INDEPENDIENTE ---
         function updateLayersPanel() {
             const listContainer = document.getElementById('layersList');
             listContainer.innerHTML = '';
@@ -836,15 +1114,15 @@
 
                 let label = "Objeto";
                 if (obj.type === 'i-text' || obj.type === 'text') {
-                    label = `T: "${obj.text.substring(0, 8)}${obj.text.length > 8 ? '...' : ''}"`;
+                    label = `Texto: "${obj.text.substring(0, 8)}${obj.text.length > 8 ? '...' : ''}"`;
                 } else if (obj.type === 'image') {
-                    label = 'Imagen';
+                    label = 'Imagen / Foto';
                 }
 
                 item.innerHTML = `
-                    <div class="layer-info" title="Seleccionar">${label}</div>
+                    <div class="layer-info" title="Seleccionar capa">${label}</div>
                     <div class="layer-controls">
-                        <input type="range" class="opacity-slider" min="0" max="1" step="0.05" value="${obj.opacity || 1}" title="Opacidad" style="width: 45px; height: 4px; padding: 0;">
+                        <input type="range" class="opacity-slider" min="0" max="1" step="0.05" value="${obj.opacity || 1}" title="Opacidad" style="width: 70px; height: 4px; padding: 0;">
                         <button class="layer-btn visibility-btn" title="Mostrar/Ocultar">${obj.visible ? '👁️' : '👁️‍🗨️'}</button>
                     </div>
                 `;
@@ -852,10 +1130,8 @@
                 item.querySelector('.layer-info').addEventListener('click', () => {
                     canvas.setActiveObject(obj);
                     canvas.renderAll();
-                    
-                    // En móviles, saltar a la pestaña de propiedades al seleccionar capa
                     if (window.innerWidth <= 768) {
-                        switchMobileTab('panel-properties');
+                        switchMobileTab('panel-properties'); // Salta a propiedades en pantallas pequeñas
                     }
                 });
 
@@ -881,7 +1157,7 @@
             }
         }
 
-        // --- 7. PANEL DE CONTROL DE PROPIEDADES ---
+        // --- 8. PANEL DE CONTROL DE PROPIEDADES ---
         const propertiesPanel = document.getElementById('propertiesPanel');
         const noSelectionMsg = document.getElementById('noSelectionMsg');
         const textControls = document.getElementById('textControls');
@@ -889,6 +1165,17 @@
         const fontFamilySelect = document.getElementById('fontFamilySelect');
         const fontSizeInput = document.getElementById('fontSizeInput');
         const textColorInput = document.getElementById('textColorInput');
+        
+        const alignBtns = document.querySelectorAll('.align-btn');
+        const charSpacingInput = document.getElementById('charSpacingInput');
+        const charSpacingLabel = document.getElementById('charSpacingLabel');
+        const lineHeightInput = document.getElementById('lineHeightInput');
+        const lineHeightLabel = document.getElementById('lineHeightLabel');
+        
+        const strokeWidthInput = document.getElementById('strokeWidthInput');
+        const strokeWidthLabel = document.getElementById('strokeWidthLabel');
+        const strokeColorInput = document.getElementById('strokeColorInput');
+
         const curvedTextCheckbox = document.getElementById('curvedTextCheckbox');
         const curveControls = document.getElementById('curveControls');
         const curveRadiusInput = document.getElementById('curveRadiusInput');
@@ -911,9 +1198,30 @@
             if (obj.type === 'text' || obj.type === 'i-text') {
                 textControls.classList.remove('hidden');
                 textStringInput.value = obj.text;
-                fontFamilySelect.value = obj.fontFamily;
-                fontSizeInput.value = obj.fontSize;
-                textColorInput.value = obj.fill;
+                fontFamilySelect.value = obj.fontFamily || 'Roboto';
+                fontSizeInput.value = obj.fontSize || 24;
+                textColorInput.value = obj.fill || '#334155';
+
+                alignBtns.forEach(btn => {
+                    if (btn.dataset.align === (obj.textAlign || 'left')) {
+                        btn.classList.add('active-align');
+                    } else {
+                        btn.classList.remove('active-align');
+                    }
+                });
+
+                const spacingVal = obj.charSpacing || 0;
+                charSpacingInput.value = spacingVal;
+                charSpacingLabel.innerText = `Espacio Letras (${spacingVal})`;
+
+                const lineVal = obj.lineHeight || 1.15;
+                lineHeightInput.value = lineVal;
+                lineHeightLabel.innerText = `Interlineado (${lineVal.toFixed(2)})`;
+
+                const strokeVal = obj.strokeWidth || 0;
+                strokeWidthInput.value = strokeVal;
+                strokeWidthLabel.innerText = `Grosor: ${strokeVal}px`;
+                strokeColorInput.value = obj.stroke || '#000000';
 
                 if (obj.path) {
                     curvedTextCheckbox.checked = true;
@@ -938,7 +1246,7 @@
             updateLayersPanel();
         }
 
-        // --- 8. EVENTOS DE EDICIÓN EN TIEMPO REAL ---
+        // --- 9. EVENTOS DE EDICIÓN ---
         textStringInput.addEventListener('input', (e) => {
             const active = canvas.getActiveObject();
             if (active) {
@@ -949,7 +1257,6 @@
                 canvas.renderAll();
             }
         });
-        
         textStringInput.addEventListener('change', saveHistoryState);
 
         fontFamilySelect.addEventListener('change', (e) => {
@@ -968,13 +1275,71 @@
                 canvas.renderAll();
             }
         });
-
         fontSizeInput.addEventListener('change', saveHistoryState);
 
         textColorInput.addEventListener('change', (e) => {
             const active = canvas.getActiveObject();
             if (active) {
                 active.set('fill', e.target.value);
+                canvas.renderAll();
+                saveHistoryState();
+            }
+        });
+
+        alignBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const active = canvas.getActiveObject();
+                if (active && (active.type === 'text' || active.type === 'i-text')) {
+                    active.set('textAlign', btn.dataset.align);
+                    canvas.renderAll();
+                    saveHistoryState();
+                    
+                    alignBtns.forEach(b => b.classList.remove('active-align'));
+                    btn.classList.add('active-align');
+                }
+            });
+        });
+
+        charSpacingInput.addEventListener('input', (e) => {
+            const active = canvas.getActiveObject();
+            const val = parseInt(e.target.value);
+            charSpacingLabel.innerText = `Espacio Letras (${val})`;
+            if (active && (active.type === 'text' || active.type === 'i-text')) {
+                active.set('charSpacing', val);
+                canvas.renderAll();
+            }
+        });
+        charSpacingInput.addEventListener('change', saveHistoryState);
+
+        lineHeightInput.addEventListener('input', (e) => {
+            const active = canvas.getActiveObject();
+            const val = parseFloat(e.target.value);
+            lineHeightLabel.innerText = `Interlineado (${val.toFixed(2)})`;
+            if (active && (active.type === 'text' || active.type === 'i-text')) {
+                active.set('lineHeight', val);
+                canvas.renderAll();
+            }
+        });
+        lineHeightInput.addEventListener('change', saveHistoryState);
+
+        strokeWidthInput.addEventListener('input', (e) => {
+            const active = canvas.getActiveObject();
+            const val = parseInt(e.target.value);
+            strokeWidthLabel.innerText = `Grosor: ${val}px`;
+            if (active && (active.type === 'text' || active.type === 'i-text')) {
+                active.set('strokeWidth', val);
+                if (val > 0 && !active.stroke) {
+                    active.set('stroke', strokeColorInput.value);
+                }
+                canvas.renderAll();
+            }
+        });
+        strokeWidthInput.addEventListener('change', saveHistoryState);
+
+        strokeColorInput.addEventListener('change', (e) => {
+            const active = canvas.getActiveObject();
+            if (active && (active.type === 'text' || active.type === 'i-text')) {
+                active.set('stroke', e.target.value);
                 canvas.renderAll();
                 saveHistoryState();
             }
@@ -1002,7 +1367,6 @@
                 updateTextCurve(active, true, radiusVal, curveInvertCheckbox.checked);
             }
         });
-
         curveRadiusInput.addEventListener('change', saveHistoryState);
 
         curveInvertCheckbox.addEventListener('change', (e) => {
@@ -1051,21 +1415,22 @@
             if (!isHistoryOperation) saveHistoryState();
         });
 
-        // --- 9. ACCIONES AGREGAR ELEMENTOS ---
+        // --- 10. ACCIONES DE CAPAS ---
         document.getElementById('addTextBtn').addEventListener('click', () => {
-            const text = new fabric.IText('Lomo Circular', {
-                left: canvas.width / 2 - 50,
+            const text = new fabric.IText('Mi Etiqueta\nTexto', {
+                left: canvas.width / 2 - 80,
                 top: canvas.height / 2 - 20,
                 fontFamily: 'Montserrat',
                 fontSize: 24,
-                fill: '#334155'
+                fill: '#334155',
+                textAlign: 'center'
             });
             canvas.add(text);
             canvas.setActiveObject(text);
             canvas.renderAll();
             
             if (window.innerWidth <= 768) {
-                switchMobileTab('panel-editor'); // Cambiar al lienzo para verlo
+                switchMobileTab('panel-editor');
             }
         });
 
@@ -1099,24 +1464,6 @@
             saveHistoryState();
         });
 
-        // --- 10. ATAJOS DE TECLADO (Ctrl + Z / Ctrl + Y) ---
-        window.addEventListener('keydown', (e) => {
-            const isEditing = canvas.getActiveObject() && canvas.getActiveObject().isEditing;
-            if (isEditing) return;
-
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
-                e.preventDefault();
-                undo();
-            }
-            if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y')) {
-                e.preventDefault();
-                redo();
-            }
-        });
-
-        document.getElementById('undoBtn').addEventListener('click', undo);
-        document.getElementById('redoBtn').addEventListener('click', redo);
-
         // --- 11. SISTEMA DE ASISTENTE INICIAL ---
         const startupModal = document.getElementById('startupModal');
         const startProjectBtn = document.getElementById('startProjectBtn');
@@ -1124,7 +1471,14 @@
         startProjectBtn.addEventListener('click', () => {
             const name = document.getElementById('initProjectName').value.trim() || "Nueva Etiqueta";
             const shape = document.getElementById('initShape').value;
-            const size = parseInt(document.getElementById('initSize').value);
+            
+            // Cálculos en Centímetros
+            const widthCm = Math.max(3, Math.min(20, parseFloat(document.getElementById('initWidthCm').value) || 10));
+            const heightCm = Math.max(3, Math.min(20, parseFloat(document.getElementById('initHeightCm').value) || 10));
+            
+            // Conversión a Pixeles para el canvas de Fabric.js
+            const pxWidth = Math.round(widthCm * CM_TO_PX);
+            const pxHeight = Math.round(heightCm * CM_TO_PX);
 
             document.getElementById('projectNameInput').value = name;
             document.getElementById('currentProjectDisplay').innerText = `(${name})`;
@@ -1132,7 +1486,7 @@
 
             startupModal.classList.add('hidden');
             
-            setCanvasDimensions(size);
+            setCanvasDimensions(pxWidth, pxHeight);
             canvas.clear();
             applyLabelShape(shape);
 
@@ -1152,7 +1506,7 @@
             }
         });
 
-        // --- 12. GUARDAR / CARGAR INDEXEDDB ---
+        // --- 12. GUARDAR / CARGAR DATOS ---
         document.getElementById('saveProjectBtn').addEventListener('click', () => {
             const name = document.getElementById('projectNameInput').value.trim() || "Etiqueta Guardada";
             document.getElementById('currentProjectDisplay').innerText = `(${name})`;
@@ -1171,36 +1525,29 @@
                 canvasJSON: JSON.stringify(canvas.toJSON(['clipPath', 'absolutePositioned'])),
                 thumbnail: thumbnail,
                 updatedAt: new Date().getTime(),
-                canvasSize: canvas.width
+                canvasWidth: canvas.width,
+                canvasHeight: canvas.height
             };
 
             if (currentProjectId !== null) {
                 projectData.id = currentProjectId;
             }
 
-            const transaction = db.transaction([STORE_NAME], "readwrite");
-            const store = transaction.objectStore(STORE_NAME);
-            const request = store.put(projectData);
-
-            request.onsuccess = function(e) {
-                if (currentProjectId === null) {
-                    currentProjectId = e.target.result;
-                }
+            persistProject(projectData).then((id) => {
+                currentProjectId = id;
                 loadProjectsList();
                 alert("Proyecto guardado exitosamente.");
-            };
+            }).catch(err => {
+                console.error("Fallo al persistir proyecto:", err);
+            });
         });
 
         function loadProjectsList() {
             const container = document.getElementById('projectListContainer');
-            container.innerHTML = '';
+            container.innerHTML = '<div style="color: #64748b; font-size: 0.75rem; text-align: center; padding: 10px;">Cargando lista...</div>';
 
-            const transaction = db.transaction([STORE_NAME], "readonly");
-            const store = transaction.objectStore(STORE_NAME);
-            const request = store.getAll();
-
-            request.onsuccess = function(e) {
-                const list = e.target.result;
+            fetchAllProjects().then(list => {
+                container.innerHTML = '';
                 if (!list || list.length === 0) {
                     container.innerHTML = `<div style="color: #9ca3af; font-size: 0.75rem; text-align: center; padding: 10px;">Sin proyectos</div>`;
                     return;
@@ -1220,23 +1567,18 @@
                             <img src="${proj.thumbnail}" alt="preview">
                             <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                 <strong>${proj.name}</strong><br>
-                                <span style="font-size:0.65rem; color:#64748b;">${proj.shape} - ${proj.canvasSize}px</span>
+                                <span style="font-size:0.65rem; color:#64748b;">${proj.shape} - ${Math.round(proj.canvasWidth / CM_TO_PX)}x${Math.round(proj.canvasHeight / CM_TO_PX)}cm</span>
                             </div>
                         </div>
                         <button class="layer-btn" style="color:#ef4444;" onclick="deleteProject(${proj.id})">&times;</button>
                     `;
                     container.appendChild(item);
                 });
-            };
+            });
         }
 
         window.loadSavedProject = function(id) {
-            const transaction = db.transaction([STORE_NAME], "readonly");
-            const store = transaction.objectStore(STORE_NAME);
-            const request = store.get(id);
-
-            request.onsuccess = function(e) {
-                const proj = e.target.result;
+            fetchSingleProject(id).then(proj => {
                 if (!proj) return;
 
                 currentProjectId = proj.id;
@@ -1245,8 +1587,9 @@
                 document.getElementById('canvasShapeSelect').value = proj.shape;
                 startupModal.classList.add('hidden');
 
-                const size = proj.canvasSize || 450;
-                setCanvasDimensions(size);
+                const w = proj.canvasWidth || 350;
+                const h = proj.canvasHeight || 350;
+                setCanvasDimensions(w, h);
 
                 canvas.loadFromJSON(proj.canvasJSON, () => {
                     applyLabelShape(proj.shape);
@@ -1263,14 +1606,12 @@
                         switchMobileTab('panel-editor');
                     }
                 });
-            };
+            });
         };
 
         window.deleteProject = function(id) {
             if (confirm("¿Seguro que deseas eliminar este proyecto?")) {
-                const transaction = db.transaction([STORE_NAME], "readwrite");
-                const store = transaction.objectStore(STORE_NAME);
-                store.delete(id).onsuccess = () => {
+                removeProject(id).then(() => {
                     if (currentProjectId === id) {
                         currentProjectId = null;
                         document.getElementById('projectNameInput').value = "Nueva Etiqueta";
@@ -1279,11 +1620,11 @@
                         applyLabelShape('circle');
                     }
                     loadProjectsList();
-                };
+                });
             }
         };
 
-        // --- 13. EXPORTAR IMAGEN DE RESULTADO ---
+        // --- 13. EXPORTAR IMAGEN ---
         document.getElementById('exportBtn').addEventListener('click', () => {
             if (guideShapeObj) {
                 guideShapeObj.visible = false;
@@ -1308,20 +1649,19 @@
             document.body.removeChild(link);
         });
 
-        // --- 14. SISTEMA DE RESPONSIVIDAD Y LOGICA DE PESTAÑAS (Para Celulares) ---
+        // --- 14. LOGICA DE PESTAÑAS MÓVILES (4 Pestañas) ---
         const mobileTabBtns = document.querySelectorAll('.mobile-tab-btn');
         const panels = {
             'panel-projects': document.getElementById('panel-projects'),
+            'panel-layers': document.getElementById('panel-layers'),
             'panel-editor': document.getElementById('panel-editor'),
             'panel-properties': document.getElementById('panel-properties')
         };
 
         function switchMobileTab(targetId) {
-            // Desactivar botones y paneles
             mobileTabBtns.forEach(btn => btn.classList.remove('active'));
             Object.values(panels).forEach(panel => panel.classList.remove('active-mobile-panel'));
 
-            // Activar selección
             const activeBtn = document.querySelector(`.mobile-tab-btn[data-target="${targetId}"]`);
             if (activeBtn) activeBtn.classList.add('active');
             
@@ -1329,7 +1669,6 @@
                 panels[targetId].classList.add('active-mobile-panel');
             }
 
-            // Recalcular posiciones del canvas en el viewport táctil
             canvas.calcOffset();
             canvas.renderAll();
         }
@@ -1340,13 +1679,10 @@
             });
         });
 
-        // Detectar cambios de tamaño de pantalla en tiempo real
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768) {
-                // Quitar clases móviles si regresa a resolución PC
                 Object.values(panels).forEach(p => p.classList.remove('active-mobile-panel'));
             } else {
-                // Si pasa a móvil, mostrar por defecto el panel del editor
                 const hasActive = Object.values(panels).some(p => p.classList.contains('active-mobile-panel'));
                 if (!hasActive) {
                     switchMobileTab('panel-editor');
@@ -1356,13 +1692,35 @@
             canvas.renderAll();
         });
 
-        // Inicialización
-        window.addEventListener('load', () => {
+        // Teclado
+        window.addEventListener('keydown', (e) => {
+            const isEditing = canvas.getActiveObject() && canvas.getActiveObject().isEditing;
+            if (isEditing) return;
+
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+                e.preventDefault();
+                undo();
+            }
+            if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y')) {
+                e.preventDefault();
+                redo();
+            }
+        });
+
+        document.getElementById('undoBtn').addEventListener('click', undo);
+        document.getElementById('redoBtn').addEventListener('click', redo);
+
+        // --- 15. INICIO DE LA APLICACIÓN ---
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.innerWidth <= 768) {
+                switchMobileTab('panel-editor');
+            } else {
+                setCanvasDimensions(350, 350); // Medida inicial 10x10 cm por defecto
+                applyLabelShape('circle');
+            }
+            
             initDatabase().then(() => {
                 loadProjectsList();
-                if (window.innerWidth <= 768) {
-                    switchMobileTab('panel-editor');
-                }
             });
         });
     </script>
