@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interfaz Adaptativa Modular</title>
+    <!-- Enlace al archivo CSS externo -->
+    <link rel="stylesheet" href="styles.css">
+
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <!-- === HEADER STICKY === -->
+    <header id="main-header">
+        <svg id="logo-svg" class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="40" />
+        </svg>
+    </header>
+
+    <main>
+        <!-- BLOQUE 1: Estático con imagen de fondo y texto -->
+        <section class="block-static">
+            <div class="static-overlay"></div>
+            <div class="static-content">
+                <img src="assets/marchantica.svg" alt="logmar">
+                <p style="letter-spacing: 4px;">Bienvenido al futuro, nuestro futuro</p>
+            </div>
+        </section>
+
+        <!-- BLOQUE 2: Parallax con animación SVG -->
+        <section class="block-parallax">
+            <div class="parallax-content">
+                <h2>Interactividad en Movimiento</h2>
+                <p>El fondo se desplaza a otra velocidad y el SVG reacciona a tu scroll.</p>
+                
+                <!-- SVG de ejemplo (Una tuerca/engranaje geométrico) -->
+                <svg id="animated-shape" class="animated-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="25" y="25" width="50" height="50" fill="none" stroke="currentColor" stroke-width="5"/>
+                    <circle cx="50" cy="50" r="15" fill="currentColor"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- BLOQUE 3: Bloque de información altamente adaptativo -->
+        <section class="block-info">
+            <article class="reading-container">
+                <h2>Lectura Optimizada</h2>
+                <p>
+                    Este bloque está diseñado científicamente para la lectura. Utiliza la función <strong>clamp()</strong> de CSS para calcular el tamaño de la fuente dinámicamente según la pantalla. En un teléfono móvil, el texto es cómodo y legible; en un monitor UltraWide o Smart TV, la fuente crece proporcionalmente sin volverse tosca.
+                </p>
+                <p>
+                    Además, el contenedor tiene un límite de ancho basado en la unidad <code>ch</code> (caracteres). Los estudios de tipografía indican que una línea de texto no debe superar los 65-75 caracteres para no cansar la vista del usuario al saltar a la siguiente línea. Esto significa que sin importar qué tan grande sea la pantalla, el texto nunca se extenderá de lado a lado de forma incómoda.
+                </p>
+            </article>
+        </section>
+    </main>
+
+    <!-- === BARRA INFERIOR (Gatillo) === -->
+    <div class="bottom-trigger-container">
+        <div id="bottom-bar" class="bottom-bar" tabindex="0" role="button" aria-label="Abrir menú"></div>
+    </div>
+
+    <!-- === OVERLAY DEL MENÚ === -->
+    <div id="menu-overlay" class="menu-overlay">
+        <div class="glass-menu">
+            <div id="close-btn" class="close-btn" tabindex="0" role="button" aria-label="Cerrar menú"></div>
+            <div class="menu-item" tabindex="0" role="button"></div>
+            <div class="menu-item" tabindex="0" role="button"></div>
+            <div class="menu-item" tabindex="0" role="button"></div>
+        </div>
+    </div>
+
+    <!-- Enlace al archivo JavaScript externo -->
+    <script src="script.js"></script>
+</body>
+</html>
