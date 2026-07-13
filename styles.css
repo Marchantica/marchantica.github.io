@@ -283,3 +283,10 @@ header {
 #logo-svg {
     transition: fill 0.1s ease-out;
 }
+.parallax-gif {
+    width: 80px; /* El tamaño que necesites */
+    height: auto;
+    display: block;
+    margin: 0 auto; /* Para centrarlo */
+    /* transition: transform 0.1s ease-out; Opcional para suavizar */
+}
